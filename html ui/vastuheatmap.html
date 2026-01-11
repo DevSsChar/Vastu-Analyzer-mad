@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vastu Compliance Heatmap</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#db7706",
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#231a0f",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "body": ["Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Custom map pin shape */
+        .pin-shape {
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-display bg-background-light dark:bg-background-dark text-[#1c150d] dark:text-[#fcfaf8] h-screen flex flex-col overflow-hidden">
+<!-- Top Navigation -->
+<div class="flex-none bg-background-light dark:bg-background-dark z-20">
+<div class="flex items-center p-4 pb-2 justify-between">
+<button class="flex size-12 shrink-0 items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[#1c150d] dark:text-white" style="font-size: 24px;">arrow_back</span>
+</button>
+<h2 class="text-[#1c150d] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] text-center flex-1">Vastu Compliance Heatmap</h2>
+<div class="flex w-12 items-center justify-end">
+<button class="flex size-12 cursor-pointer items-center justify-center rounded-full hover:bg-black/5 dark:hover:bg-white/10 transition-colors">
+<span class="material-symbols-outlined text-[#1c150d] dark:text-white" style="font-size: 24px;">info</span>
+</button>
+</div>
+</div>
+<!-- View Mode Toggle -->
+<div class="px-4 pb-4">
+<div class="flex h-10 w-full items-center justify-center rounded-xl bg-[#f4eee6] dark:bg-white/10 p-1">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-[#db7706] has-[:checked]:shadow-sm has-[:checked]:text-primary dark:has-[:checked]:text-white text-[#9e7647] dark:text-gray-400 text-sm font-bold transition-all">
+<span class="truncate">Heatmap View</span>
+<input checked="" class="invisible w-0 absolute" name="view-mode" type="radio" value="Heatmap View"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-[#db7706] has-[:checked]:shadow-sm has-[:checked]:text-primary dark:has-[:checked]:text-white text-[#9e7647] dark:text-gray-400 text-sm font-bold transition-all">
+<span class="truncate">Directional Grid</span>
+<input class="invisible w-0 absolute" name="view-mode" type="radio" value="Directional Grid"/>
+</label>
+</div>
+</div>
+</div>
+<!-- Main Visualization Area (50% Height) -->
+<div class="relative w-full h-[50vh] bg-[#f0f0f0] dark:bg-[#1a1612] overflow-hidden flex-none shadow-inner group/map">
+<!-- Floor Plan Image -->
+<div class="absolute inset-0 flex items-center justify-center p-4">
+<img alt="Architectural floor plan blueprint on a light background" class="w-full h-full object-contain opacity-80 dark:opacity-60 dark:invert-[0.1]" data-alt="Architectural floor plan blueprint on a light background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7-944aqgXMEbYs-SPos6Vf2FDGAyTqENI3as5ugrVhJ8c9hth1rRILSJpBhnkkJtCZdgp0oB-1bP1W8XaWsFmdeQ1Ht5mhKRHo8xZmFswHzDbbkgchMs0gj6wDdPaDchLg0IbUXtxBgLuZxcARFD0i73U3WIVhepLYLQD_JVy7-NLunKpCp4i2PbASeQJakt7iCQl_WDBn635SJ14DzPwGNhjkK5SuWzm6nUk1NwKtITJqhGI5ziHE7MF0SkRQMLZZFJx7wSgMOY"/>
+</div>
+<!-- Heatmap Overlay (Radial Gradient Simulation) -->
+<div class="absolute inset-0 bg-gradient-to-tr from-green-500/20 via-transparent to-red-500/30 mix-blend-multiply dark:mix-blend-overlay pointer-events-none"></div>
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(34,197,94,0.2),transparent_40%)] pointer-events-none"></div>
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(239,68,68,0.3),transparent_40%)] pointer-events-none"></div>
+<!-- Compass Rose (Fixed Top Right) -->
+<div class="absolute top-4 right-4 z-10">
+<div class="w-20 h-20 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-full shadow-lg flex items-center justify-center border-2 border-primary/20">
+<span class="material-symbols-outlined text-primary text-5xl rotate-45 transform transition-transform duration-700">explore</span>
+<span class="absolute text-[10px] font-bold text-gray-500 top-1">N</span>
+</div>
+</div>
+<!-- Floating Zoom Controls (Right) -->
+<div class="absolute top-1/2 -translate-y-1/2 right-4 flex flex-col gap-2 z-10">
+<button class="size-10 bg-white dark:bg-gray-800 rounded-xl shadow-lg flex items-center justify-center text-gray-700 dark:text-gray-200 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="size-10 bg-white dark:bg-gray-800 rounded-xl shadow-lg flex items-center justify-center text-gray-700 dark:text-gray-200 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">remove</span>
+</button>
+<button class="size-10 bg-white dark:bg-gray-800 rounded-xl shadow-lg flex items-center justify-center text-gray-700 dark:text-gray-200 active:scale-95 transition-transform">
+<span class="material-symbols-outlined" style="font-size: 20px;">center_focus_strong</span>
+</button>
+</div>
+<!-- Pin Markers (Examples) -->
+<!-- Critical Issue Pin -->
+<div class="absolute top-[20%] right-[25%] flex flex-col items-center group cursor-pointer">
+<div class="relative">
+<div class="absolute -inset-2 bg-red-500/40 rounded-full animate-ping"></div>
+<div class="w-8 h-8 bg-red-600 pin-shape shadow-lg flex items-center justify-center border-2 border-white dark:border-gray-900 z-10 relative">
+<span class="material-symbols-outlined text-white rotate-45" style="font-size: 16px;">warning</span>
+</div>
+</div>
+<div class="mt-1 bg-black/75 text-white text-[10px] px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity">Dosha</div>
+</div>
+<!-- Good Zone Pin -->
+<div class="absolute bottom-[25%] left-[30%] flex flex-col items-center group cursor-pointer">
+<div class="w-8 h-8 bg-green-600 pin-shape shadow-lg flex items-center justify-center border-2 border-white dark:border-gray-900 z-10">
+<span class="material-symbols-outlined text-white rotate-45" style="font-size: 16px;">check</span>
+</div>
+</div>
+<!-- Floating Layer Toggles (Bottom Scrollable) -->
+<div class="absolute bottom-4 left-0 right-0 px-4 overflow-x-auto scrollbar-hide flex gap-2 z-10 pb-1">
+<button class="shrink-0 h-8 px-3 rounded-full bg-primary text-white text-xs font-bold shadow-md flex items-center gap-1 border border-primary/50">
+<span class="material-symbols-outlined text-[16px]">layers</span>
+                Heatmap
+            </button>
+<button class="shrink-0 h-8 px-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur text-gray-700 dark:text-gray-200 text-xs font-semibold shadow-md flex items-center gap-1 border border-gray-200 dark:border-gray-700">
+<span class="material-symbols-outlined text-[16px]">grid_4x4</span>
+                Vastu Grid
+            </button>
+<button class="shrink-0 h-8 px-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur text-gray-700 dark:text-gray-200 text-xs font-semibold shadow-md flex items-center gap-1 border border-gray-200 dark:border-gray-700">
+<span class="material-symbols-outlined text-[16px]">error</span>
+                Doshas
+            </button>
+<button class="shrink-0 h-8 px-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur text-gray-700 dark:text-gray-200 text-xs font-semibold shadow-md flex items-center gap-1 border border-gray-200 dark:border-gray-700">
+<span class="material-symbols-outlined text-[16px]">label</span>
+                Labels
+            </button>
+</div>
+<!-- Legend Card (Bottom Left - Floating) -->
+<div class="absolute bottom-16 left-4 bg-white/95 dark:bg-gray-900/95 backdrop-blur rounded-lg p-2 shadow-xl border border-gray-100 dark:border-gray-800 max-w-[140px]">
+<div class="text-[10px] font-bold text-gray-500 mb-1 uppercase tracking-wider">Compliance</div>
+<div class="flex items-center gap-2 mb-1">
+<div class="h-1.5 flex-1 rounded-full bg-gradient-to-r from-green-500 via-yellow-400 to-red-500"></div>
+</div>
+<div class="flex justify-between text-[9px] font-medium text-gray-400">
+<span>Good</span>
+<span>Critical</span>
+</div>
+</div>
+</div>
+<!-- Scrollable Content Panel -->
+<div class="flex-1 overflow-y-auto bg-background-light dark:bg-background-dark relative rounded-t-2xl -mt-4 z-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] border-t border-white/50 dark:border-gray-800">
+<!-- Drag Handle -->
+<div class="w-full flex justify-center pt-3 pb-1">
+<div class="w-12 h-1.5 bg-gray-300 dark:bg-gray-700 rounded-full"></div>
+</div>
+<div class="p-5 space-y-6">
+<!-- Zone Information Panel -->
+<div class="bg-white dark:bg-[#2c241b] rounded-xl p-4 shadow-sm border border-gray-100 dark:border-gray-800">
+<div class="flex justify-between items-start mb-3">
+<div>
+<div class="text-xs font-bold text-primary uppercase tracking-wide mb-1">Selected Zone</div>
+<h3 class="text-xl font-bold text-gray-900 dark:text-white leading-tight">North-East (Ishan)</h3>
+<p class="text-sm text-gray-500 dark:text-gray-400">Deity: Lord Shiva (Water Element)</p>
+</div>
+<div class="flex flex-col items-end">
+<div class="text-3xl font-bold text-red-600">42<span class="text-sm text-gray-400 font-medium">/100</span></div>
+<div class="text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded-full mt-1">Poor</div>
+</div>
+</div>
+<div class="p-3 bg-red-50 dark:bg-red-900/10 rounded-lg border border-red-100 dark:border-red-900/30">
+<div class="flex items-start gap-2">
+<span class="material-symbols-outlined text-red-600 mt-0.5" style="font-size: 18px;">warning</span>
+<p class="text-sm text-gray-700 dark:text-gray-300 leading-snug">
+<span class="font-bold text-gray-900 dark:text-white">Critical Issue:</span> Toilet located in the North-East corner blocks positive energy inflow.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Issue Markers List -->
+<div>
+<div class="flex justify-between items-center mb-3">
+<h4 class="text-base font-bold text-gray-900 dark:text-white">All Issues Found</h4>
+<button class="text-xs font-bold text-primary">See List</button>
+</div>
+<div class="flex gap-3 overflow-x-auto pb-4 -mx-5 px-5 scrollbar-hide">
+<!-- Card 1 -->
+<div class="shrink-0 w-64 bg-white dark:bg-[#2c241b] rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-800 border-l-4 border-l-red-500">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-bold text-gray-400">South-West</span>
+<span class="material-symbols-outlined text-red-500" style="font-size: 20px;">error</span>
+</div>
+<div class="font-bold text-gray-900 dark:text-white text-sm mb-1">Master Bedroom Missing</div>
+<p class="text-xs text-gray-500 line-clamp-2">The master bedroom should be in the SW corner for stability.</p>
+</div>
+<!-- Card 2 -->
+<div class="shrink-0 w-64 bg-white dark:bg-[#2c241b] rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-800 border-l-4 border-l-orange-500">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-bold text-gray-400">South-East</span>
+<span class="material-symbols-outlined text-orange-500" style="font-size: 20px;">local_fire_department</span>
+</div>
+<div class="font-bold text-gray-900 dark:text-white text-sm mb-1">Kitchen Misplaced</div>
+<p class="text-xs text-gray-500 line-clamp-2">Ideally, the kitchen should be in the fire corner (SE).</p>
+</div>
+<!-- Card 3 -->
+<div class="shrink-0 w-64 bg-white dark:bg-[#2c241b] rounded-xl p-3 shadow-sm border border-gray-100 dark:border-gray-800 border-l-4 border-l-yellow-500">
+<div class="flex justify-between items-start mb-2">
+<span class="text-xs font-bold text-gray-400">Center (Brahmasthan)</span>
+<span class="material-symbols-outlined text-yellow-500" style="font-size: 20px;">block</span>
+</div>
+<div class="font-bold text-gray-900 dark:text-white text-sm mb-1">Heavy Furniture</div>
+<p class="text-xs text-gray-500 line-clamp-2">The center of the home should remain empty and light.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Actions -->
+<div class="flex-none p-5 pb-8 bg-white dark:bg-background-dark border-t border-gray-100 dark:border-gray-800 z-30">
+<div class="flex gap-3">
+<button class="flex-1 h-12 rounded-xl bg-gray-100 dark:bg-white/5 text-gray-900 dark:text-white font-bold text-sm hover:bg-gray-200 dark:hover:bg-white/10 transition-colors">
+                View All Issues
+            </button>
+<button class="flex-[2] h-12 rounded-xl bg-primary text-white font-bold text-sm shadow-lg shadow-primary/30 flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 20px;">healing</span>
+                Get Remedies
+            </button>
+</div>
+</div>
+</body></html>

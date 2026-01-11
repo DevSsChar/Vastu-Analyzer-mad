@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login &amp; Authentication - VastuWise AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#ca7616",
+            "background-light": "#FFFBEB",
+            "background-dark": "#211a11",
+            "stone-custom": "#1b150e",
+            "stone-subtle": "#97754e",
+          },
+          fontFamily: {
+            "display": ["Manrope", "sans-serif"]
+          },
+          borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1.5rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>body {
+    font-family: "Manrope", sans-serif
+    }
+.mandala-bg {
+    background-image: url(https://lh3.googleusercontent.com/aida-public/AB6AXuD_JrxdljSHwvIHWYCm6pHV7fFLlNXUOHe4ynM33AnQJmiFrwvKNJpvL_Vmj_joHaZYwGvqpsV687EMA7JECAaYKVOxfbzomHzXMwmU1_C2DF2vB4md8kK-5_00SbA-ZFQJ3aChzyzqEnThIUuYSYhzBf8DPZSrzesTx-gOAl44wireQuzL1QogWhd0OlC0A_ccmuRJHDx96MWBnshDYbhXWJKagyq-zaBb7qzLPfpXKMVBXL00x_DinnZCitUGlfTiI-yZRahJKXM);
+    opacity: 0.05
+    }</style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark min-h-screen flex flex-col font-display">
+<!-- Background Pattern Overlay -->
+<div class="fixed inset-0 mandala-bg pointer-events-none"></div>
+<div class="relative z-10 flex flex-col min-h-screen w-full max-w-[430px] mx-auto overflow-x-hidden">
+<!-- Top Bar / Back Navigation (Optional for iOS feel) -->
+<div class="flex items-center px-4 pt-4 pb-2">
+<div class="text-stone-custom dark:text-white cursor-pointer p-2 -ml-2">
+<span class="material-symbols-outlined">chevron_left</span>
+</div>
+</div>
+<!-- Branding Section -->
+<div class="flex flex-col items-center px-6 pt-6 pb-8">
+<div class="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-white text-4xl" data-icon="architecture" data-size="40px">architecture</span>
+</div>
+<h1 class="text-stone-custom dark:text-white text-3xl font-bold leading-tight tracking-[-0.015em] text-center mb-2">
+        VastuWise AI
+      </h1>
+<p class="text-stone-subtle dark:text-stone-subtle/80 text-base font-normal text-center">
+        Ancient Wisdom meets Modern AI
+      </p>
+</div>
+<!-- Social Login Section -->
+<div class="px-6 py-2">
+<button class="w-full flex h-14 items-center justify-center gap-3 bg-white dark:bg-white/10 rounded-lg border border-gray-200 dark:border-white/20 shadow-sm transition-all active:scale-95">
+<img alt="Google Logo" class="w-6 h-6" data-alt="Google logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNt_hNimvAy6bFv3ow3sCN3-rqiAbjwYCwn67KzlohZ377wdgI6xnalTveR3PWSZsQfVX67BOMdtEM7q2nOIL8dulKT8qydbqHusnHFrKDRy4xDOOacQvlwKx8B-EvpTdcPLeyXQZtxCGuk_eGphlJ78LwTp0-_brGwwEpvS1JjYL8cWSWGxM-oyryEeLh-l4KIG1azqoC8GdbOApxSHO1b_atN6nlBDjSSwPwRJoycUUa46oAd5EF5ZNjBPfQfnE19yS8TTtp3pk"/>
+<span class="text-stone-custom dark:text-white text-base font-bold">Sign in with Google</span>
+</button>
+</div>
+<!-- Divider Section -->
+<div class="px-6 py-6 flex items-center gap-4">
+<div class="h-px flex-1 bg-stone-subtle/20"></div>
+<span class="text-stone-subtle text-sm font-bold tracking-wider uppercase">OR</span>
+<div class="h-px flex-1 bg-stone-subtle/20"></div>
+</div>
+<!-- Manual Login Form -->
+<div class="px-6 flex flex-col gap-4">
+<div class="flex flex-col gap-1.5">
+<label class="text-stone-custom dark:text-white/90 text-sm font-semibold px-1">Email Address</label>
+<div class="relative">
+<input class="w-full h-14 px-4 rounded-lg border border-stone-subtle/30 bg-white/50 dark:bg-white/5 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-stone-subtle/50 text-stone-custom dark:text-white" placeholder="Enter your email" type="email"/>
+</div>
+</div>
+<div class="flex flex-col gap-1.5">
+<label class="text-stone-custom dark:text-white/90 text-sm font-semibold px-1">Password</label>
+<div class="relative">
+<input class="w-full h-14 px-4 rounded-lg border border-stone-subtle/30 bg-white/50 dark:bg-white/5 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-stone-subtle/50 text-stone-custom dark:text-white" placeholder="Enter your password" type="password"/>
+</div>
+<div class="flex justify-end mt-1">
+<a class="text-primary text-sm font-bold hover:underline" href="#">Forgot Password?</a>
+</div>
+</div>
+<!-- Primary CTA -->
+<button class="w-full h-14 mt-4 bg-primary text-white rounded-lg font-bold text-lg shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all active:scale-[0.98]">
+        Login
+      </button>
+</div>
+<!-- Footer Section -->
+<div class="mt-auto pb-10 pt-8 px-6 text-center">
+<p class="text-stone-subtle dark:text-white/60 text-base">
+        Don't have an account? 
+        <a class="text-primary font-bold hover:underline ml-1" href="#">Sign Up</a>
+</p>
+</div>
+<!-- Bottom Indicator (iOS style) -->
+<div class="h-1.5 w-32 bg-stone-custom/10 dark:bg-white/20 rounded-full mx-auto mb-2 shrink-0"></div>
+</div>
+</body></html>

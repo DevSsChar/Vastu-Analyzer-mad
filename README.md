@@ -1,4 +1,38 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# VastuWise AI - React Native Mobile App
+
+A mobile application for Vastu Shastra analysis built with React Native and TypeScript.
+
+## 🎨 Features Implemented
+
+### ✅ Screens Created
+1. **Welcome/Onboarding Screen** - Features grid with app introduction
+2. **Login Screen** - Authentication with Google Sign-In and email/password
+
+### ✅ Reusable Components
+- `CustomButton` - Primary, secondary, and outline button variants
+- `CustomTextInput` - Labeled input with validation and password toggle
+- `CustomCard` - Glass morphism and solid card variants
+
+### ✅ Theme System
+- **Colors** - Centralized color palette with primary (#db7706)
+- **Typography** - Font families, sizes, weights, and line heights
+- **Spacing** - Consistent spacing scale and border radius system
+
+## 📱 Responsive Mobile Design
+
+All screens are optimized with flexible layouts, safe areas, and keyboard handling.
+
+## 🏗️ Project Structure
+
+```
+MadApp/
+├── src/
+│   ├── screens/         # WelcomeScreen, LoginScreen
+│   ├── components/      # CustomButton, CustomTextInput, CustomCard
+│   └── theme/          # colors, typography, spacing
+├── App.tsx             # Main entry point
+└── package.json
+```
 
 # Getting Started
 

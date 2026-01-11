@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>VastuWise AI Dashboard</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+            extend: {
+                colors: {
+                "primary": "#db7706",
+                "background-light": "#fcfaf8",
+                "background-dark": "#231a0f",
+                "text-main": "#1c150d",
+                "text-secondary": "#9e7647",
+                "surface-light": "#ffffff",
+                },
+                fontFamily: {
+                "display": ["Plus Jakarta Sans", "sans-serif"],
+                "body": ["Noto Sans", "sans-serif"],
+                },
+                borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "2rem", "full": "9999px"},
+            },
+            },
+        }
+    </script>
+<style>
+        /* Custom scrollbar hiding */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light text-text-main font-display antialiased">
+<div class="relative flex h-auto min-h-screen w-full max-w-md mx-auto flex-col bg-background-light group/design-root overflow-x-hidden shadow-2xl">
+<!-- Header -->
+<header class="sticky top-0 z-30 bg-background-light/95 backdrop-blur-md border-b border-primary/10">
+<div class="flex items-center justify-between p-4 pb-3">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-black/5 active:bg-black/10 transition-colors">
+<span class="material-symbols-outlined text-text-main">arrow_back</span>
+</button>
+<div class="flex flex-col items-center flex-1 px-2">
+<h2 class="text-text-main text-lg font-bold leading-tight tracking-tight">Vastu Analysis Report</h2>
+<span class="text-text-secondary text-xs font-medium">Villa 4B, Palm Grove</span>
+</div>
+<div class="flex items-center gap-2">
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-black/5 transition-colors">
+<span class="material-symbols-outlined text-text-main" style="font-size: 20px;">share</span>
+</button>
+<button class="flex size-10 items-center justify-center rounded-full hover:bg-black/5 transition-colors">
+<span class="material-symbols-outlined text-text-main" style="font-size: 20px;">download</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 pb-28">
+<!-- Hero Score Card -->
+<section class="p-4 pt-2">
+<div class="relative w-full rounded-2xl bg-gradient-to-br from-[#fff7ed] via-white to-white border border-primary/10 shadow-[0_4px_20px_rgba(219,119,6,0.08)] p-6 overflow-hidden">
+<!-- Decorative Background Pattern -->
+<div class="absolute -right-10 -top-10 w-48 h-48 rounded-full border-[20px] border-primary/5"></div>
+<div class="absolute -left-10 -bottom-10 w-32 h-32 rounded-full border-[15px] border-primary/5"></div>
+<div class="relative z-10 flex flex-col items-center text-center">
+<!-- Circular Progress Ring -->
+<div class="relative size-40 flex items-center justify-center mb-4">
+<!-- Outer Ring/Gradient -->
+<div class="absolute inset-0 rounded-full" style="background: conic-gradient(#db7706 72%, #fed7aa 72%);"></div>
+<!-- Inner Circle for donut effect -->
+<div class="absolute inset-2 rounded-full bg-white flex flex-col items-center justify-center shadow-inner">
+<span class="text-4xl font-extrabold text-text-main tracking-tight">72<span class="text-xl text-text-secondary font-medium">/100</span></span>
+</div>
+</div>
+<div class="flex items-center gap-2 mb-2 px-3 py-1 bg-green-50 rounded-full border border-green-100">
+<span class="material-symbols-outlined text-green-600 text-[18px]">check_circle</span>
+<span class="text-green-800 text-sm font-bold">Good Compliance</span>
+</div>
+<p class="text-text-secondary text-sm leading-relaxed max-w-[280px]">
+                            Your home has strong positive energy flow but needs minor elemental balancing in the North-East zone.
+                        </p>
+</div>
+</div>
+</section>
+<!-- Directional Zones Carousel -->
+<section class="mt-2">
+<div class="flex items-center justify-between px-4 mb-3">
+<h3 class="text-text-main text-lg font-bold">Directional Zones</h3>
+<a class="text-primary text-sm font-semibold hover:underline" href="#">View All</a>
+</div>
+<div class="flex overflow-x-auto gap-3 px-4 pb-4 no-scrollbar snap-x snap-mandatory">
+<!-- North Card -->
+<div class="snap-start flex-shrink-0 w-40 p-3 bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col items-center gap-3">
+<div class="w-full flex justify-between items-start">
+<span class="bg-green-50 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">Excellent</span>
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">north</span>
+</div>
+<div class="relative size-16 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full" style="background: conic-gradient(#10b981 90%, #d1fae5 90%);"></div>
+<div class="absolute inset-1 rounded-full bg-white flex items-center justify-center">
+<span class="text-sm font-bold text-text-main">90</span>
+</div>
+</div>
+<div class="text-center">
+<p class="text-text-main font-bold text-sm">North (उत्तर)</p>
+<p class="text-text-secondary text-xs">Kubera</p>
+</div>
+</div>
+<!-- North-East Card -->
+<div class="snap-start flex-shrink-0 w-40 p-3 bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col items-center gap-3">
+<div class="w-full flex justify-between items-start">
+<span class="bg-red-50 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">Remedy</span>
+<span class="material-symbols-outlined text-red-500" style="font-size: 20px;">north_east</span>
+</div>
+<div class="relative size-16 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full" style="background: conic-gradient(#ef4444 45%, #fee2e2 45%);"></div>
+<div class="absolute inset-1 rounded-full bg-white flex items-center justify-center">
+<span class="text-sm font-bold text-text-main">45</span>
+</div>
+</div>
+<div class="text-center">
+<p class="text-text-main font-bold text-sm">NE (ईशान)</p>
+<p class="text-text-secondary text-xs">Shiva</p>
+</div>
+</div>
+<!-- East Card -->
+<div class="snap-start flex-shrink-0 w-40 p-3 bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col items-center gap-3">
+<div class="w-full flex justify-between items-start">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">Good</span>
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">east</span>
+</div>
+<div class="relative size-16 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full" style="background: conic-gradient(#db7706 80%, #ffedd5 80%);"></div>
+<div class="absolute inset-1 rounded-full bg-white flex items-center justify-center">
+<span class="text-sm font-bold text-text-main">80</span>
+</div>
+</div>
+<div class="text-center">
+<p class="text-text-main font-bold text-sm">East (पूर्व)</p>
+<p class="text-text-secondary text-xs">Indra</p>
+</div>
+</div>
+<!-- South East Card -->
+<div class="snap-start flex-shrink-0 w-40 p-3 bg-white rounded-xl border border-gray-100 shadow-sm flex flex-col items-center gap-3">
+<div class="w-full flex justify-between items-start">
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wide">Avg</span>
+<span class="material-symbols-outlined text-primary" style="font-size: 20px;">south_east</span>
+</div>
+<div class="relative size-16 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full" style="background: conic-gradient(#f59e0b 60%, #fef3c7 60%);"></div>
+<div class="absolute inset-1 rounded-full bg-white flex items-center justify-center">
+<span class="text-sm font-bold text-text-main">60</span>
+</div>
+</div>
+<div class="text-center">
+<p class="text-text-main font-bold text-sm">SE (आग्नेय)</p>
+<p class="text-text-secondary text-xs">Agni</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Score Categories -->
+<section class="px-4 mt-2">
+<h3 class="text-text-main text-lg font-bold mb-3">Category Breakdown</h3>
+<div class="flex flex-col gap-3">
+<!-- Category Item 1 -->
+<div class="flex items-center gap-4 bg-white p-4 rounded-xl border-l-4 border-green-500 shadow-sm">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-green-50 text-green-600">
+<span class="material-symbols-outlined">door_front</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-end mb-1">
+<h4 class="text-text-main font-bold truncate">Entrance Alignment</h4>
+<span class="text-xl font-bold text-text-main">8.5<span class="text-sm text-text-secondary font-medium">/10</span></span>
+</div>
+<div class="w-full bg-gray-100 rounded-full h-1.5">
+<div class="bg-green-500 h-1.5 rounded-full" style="width: 85%"></div>
+</div>
+<p class="text-xs text-text-secondary mt-1">Ideally placed in positive zone.</p>
+</div>
+</div>
+<!-- Category Item 2 -->
+<div class="flex items-center gap-4 bg-white p-4 rounded-xl border-l-4 border-red-500 shadow-sm">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-500">
+<span class="material-symbols-outlined">skillet</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-end mb-1">
+<h4 class="text-text-main font-bold truncate">Kitchen Placement</h4>
+<span class="text-xl font-bold text-text-main">4.0<span class="text-sm text-text-secondary font-medium">/10</span></span>
+</div>
+<div class="w-full bg-gray-100 rounded-full h-1.5">
+<div class="bg-red-500 h-1.5 rounded-full" style="width: 40%"></div>
+</div>
+<p class="text-xs text-text-secondary mt-1">Located in North-East (Water zone).</p>
+</div>
+</div>
+<!-- Category Item 3 -->
+<div class="flex items-center gap-4 bg-white p-4 rounded-xl border-l-4 border-primary shadow-sm">
+<div class="flex size-10 shrink-0 items-center justify-center rounded-full bg-orange-50 text-primary">
+<span class="material-symbols-outlined">bed</span>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-end mb-1">
+<h4 class="text-text-main font-bold truncate">Master Bedroom</h4>
+<span class="text-xl font-bold text-text-main">7.5<span class="text-sm text-text-secondary font-medium">/10</span></span>
+</div>
+<div class="w-full bg-gray-100 rounded-full h-1.5">
+<div class="bg-primary h-1.5 rounded-full" style="width: 75%"></div>
+</div>
+<p class="text-xs text-text-secondary mt-1">Acceptable, but head position needs change.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Strengths & Weaknesses -->
+<section class="px-4 mt-6">
+<div class="grid grid-cols-2 gap-3">
+<!-- Strengths -->
+<div class="bg-green-50/50 rounded-xl p-4 border border-green-100">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-green-600">thumb_up</span>
+<h4 class="font-bold text-green-900 text-sm">Strengths</h4>
+</div>
+<ul class="space-y-2">
+<li class="flex items-start gap-2 text-xs text-green-900 font-medium leading-tight">
+<span class="text-green-600 mt-0.5">•</span>
+                                Master Bedroom in South-West
+                            </li>
+<li class="flex items-start gap-2 text-xs text-green-900 font-medium leading-tight">
+<span class="text-green-600 mt-0.5">•</span>
+                                Entrance in Positive Zone
+                            </li>
+<li class="flex items-start gap-2 text-xs text-green-900 font-medium leading-tight">
+<span class="text-green-600 mt-0.5">•</span>
+                                Staircase clockwise
+                            </li>
+</ul>
+</div>
+<!-- Weaknesses -->
+<div class="bg-red-50/50 rounded-xl p-4 border border-red-100">
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-red-500">warning</span>
+<h4 class="font-bold text-red-900 text-sm">Weaknesses</h4>
+</div>
+<ul class="space-y-2">
+<li class="flex items-start gap-2 text-xs text-red-900 font-medium leading-tight">
+<span class="text-red-500 mt-0.5">•</span>
+                                Kitchen in North-East
+                            </li>
+<li class="flex items-start gap-2 text-xs text-red-900 font-medium leading-tight">
+<span class="text-red-500 mt-0.5">•</span>
+                                Toilet near Brahmasthan
+                            </li>
+<li class="flex items-start gap-2 text-xs text-red-900 font-medium leading-tight">
+<span class="text-red-500 mt-0.5">•</span>
+                                Cut in South-East corner
+                            </li>
+</ul>
+</div>
+</div>
+</section>
+<!-- Quick Actions -->
+<section class="px-4 mt-6 mb-4">
+<h3 class="text-text-main text-sm font-bold mb-3 uppercase tracking-wider text-opacity-70">Quick Actions</h3>
+<div class="flex gap-3 overflow-x-auto no-scrollbar pb-2">
+<button class="flex items-center gap-2 px-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm hover:bg-gray-50 flex-shrink-0 transition-colors">
+<span class="material-symbols-outlined text-primary">bug_report</span>
+<span class="text-sm font-bold text-text-main">View Doshas</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm hover:bg-gray-50 flex-shrink-0 transition-colors">
+<span class="material-symbols-outlined text-primary">healing</span>
+<span class="text-sm font-bold text-text-main">See Remedies</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-3 bg-white border border-gray-200 rounded-xl shadow-sm hover:bg-gray-50 flex-shrink-0 transition-colors">
+<span class="material-symbols-outlined text-primary">meeting_room</span>
+<span class="text-sm font-bold text-text-main">Room Details</span>
+</button>
+</div>
+</section>
+</main>
+<!-- Sticky Bottom CTA -->
+<div class="fixed bottom-0 left-0 right-0 z-40 p-4 bg-gradient-to-t from-background-light via-background-light to-transparent">
+<div class="max-w-md mx-auto">
+<button class="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-[0_4px_14px_rgba(219,119,6,0.4)] transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined">map</span>
+                    View Detailed Heatmap
+                </button>
+</div>
+</div>
+</div>
+</body></html>

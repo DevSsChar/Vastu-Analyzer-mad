@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Upload Floor Plan - VastuWise AI</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Theme Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#db7706", // Amber 600
+                        "primary-light": "#fcd34d", // Amber 300
+                        "primary-bg": "#fffbeb", // Amber 50
+                        "background-light": "#f8f7f5",
+                        "background-dark": "#231a0f",
+                        "text-main": "#1c150d",
+                        "text-muted": "#9e7647",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "2xl": "2rem", "full": "9999px"},
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'ping-slow': 'ping 3s cubic-bezier(0, 0, 0.2, 1) infinite',
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Plus Jakarta Sans", sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Custom scrollbar hide for cleaner mobile look */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .dark .glass-panel {
+            background: rgba(35, 26, 15, 0.7);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-text-main dark:text-gray-100 flex flex-col min-h-screen overflow-x-hidden selection:bg-primary/30">
+<!-- Header -->
+<header class="sticky top-0 z-50 flex items-center justify-between p-4 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md border-b border-primary/10 transition-colors duration-300">
+<button aria-label="Go back" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-black/5 dark:hover:bg-white/10 active:scale-95 transition-all text-text-main dark:text-white">
+<span class="material-symbols-outlined text-[24px]">arrow_back</span>
+</button>
+<h1 class="text-lg font-bold leading-tight tracking-[-0.015em] text-text-main dark:text-white">Upload Floor Plan</h1>
+<button aria-label="Help" class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-black/5 dark:hover:bg-white/10 active:scale-95 transition-all text-text-main dark:text-white">
+<span class="material-symbols-outlined text-[24px]">help</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex-1 w-full max-w-md mx-auto flex flex-col p-4 pb-32 gap-6">
+<!-- Educational Banner -->
+<div class="relative overflow-hidden rounded-xl border border-primary/20 bg-primary-bg dark:bg-primary/10 p-4 transition-all duration-300 hover:shadow-md group">
+<!-- Decorative background element -->
+<div class="absolute -right-4 -top-4 w-20 h-20 bg-primary/10 rounded-full blur-xl group-hover:bg-primary/20 transition-all"></div>
+<div class="flex items-start gap-3 relative z-10">
+<div class="bg-primary/10 rounded-full p-2 shrink-0 text-primary mt-0.5">
+<span class="material-symbols-outlined text-[20px]">lightbulb</span>
+</div>
+<div class="flex-1">
+<p class="text-sm font-bold text-text-main dark:text-white mb-1">Vastu Pro Tip</p>
+<p class="text-xs text-text-muted dark:text-gray-300 leading-relaxed">
+                        Ensure the <strong>North direction</strong> is clearly marked on your plan for the most accurate directional analysis.
+                    </p>
+</div>
+<button aria-label="Dismiss" class="text-text-muted hover:text-primary transition-colors p-1">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<!-- Central Upload Zone -->
+<div class="relative group cursor-pointer">
+<div class="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-primary-light dark:border-primary/40 bg-white dark:bg-white/5 px-6 py-10 transition-all duration-300 hover:border-primary hover:bg-primary/5 active:scale-[0.99] active:border-primary">
+<!-- Animated Icon Container -->
+<div class="relative mb-6">
+<div class="absolute inset-0 bg-primary/20 rounded-full animate-ping-slow"></div>
+<div class="absolute inset-0 bg-primary/10 rounded-full animate-pulse-slow"></div>
+<div class="relative flex items-center justify-center w-20 h-20 bg-primary/10 rounded-full text-primary shadow-sm z-10">
+<span class="material-symbols-outlined text-[40px] filled">temple_hindu</span>
+</div>
+</div>
+<div class="text-center space-y-2 max-w-[280px]">
+<h2 class="text-xl font-bold text-text-main dark:text-white tracking-tight">Upload Your Floor Plan</h2>
+<p class="text-sm text-text-muted dark:text-gray-400 leading-relaxed">
+                        Our AI will analyze 16 directional zones according to Vastu Shastra principles.
+                    </p>
+</div>
+<button class="mt-8 flex items-center gap-2 px-5 py-2.5 bg-primary/10 hover:bg-primary/20 text-primary text-sm font-bold rounded-full transition-colors">
+<span class="material-symbols-outlined text-[20px]">upload_file</span>
+<span>Browse Files</span>
+</button>
+</div>
+</div>
+<!-- Upload Options Grid -->
+<div class="grid grid-cols-3 gap-3">
+<button class="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-white/5 hover:border-primary hover:bg-primary/5 transition-all duration-200 active:scale-95 group">
+<div class="p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 group-hover:text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-[24px]">photo_camera</span>
+</div>
+<span class="text-xs font-semibold text-text-main dark:text-gray-200">Camera</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-white/5 hover:border-primary hover:bg-primary/5 transition-all duration-200 active:scale-95 group">
+<div class="p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 group-hover:text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-[24px]">imagesmode</span>
+</div>
+<span class="text-xs font-semibold text-text-main dark:text-gray-200">Gallery</span>
+</button>
+<button class="flex flex-col items-center justify-center gap-2 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-white/5 hover:border-primary hover:bg-primary/5 transition-all duration-200 active:scale-95 group">
+<div class="p-2.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 group-hover:text-primary group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-[24px]">folder_open</span>
+</div>
+<span class="text-xs font-semibold text-text-main dark:text-gray-200">Files</span>
+</button>
+</div>
+<!-- Supported Formats Meta -->
+<div class="flex justify-center items-center gap-2 text-xs text-text-muted dark:text-gray-500">
+<span class="material-symbols-outlined text-[16px] text-primary">verified</span>
+<p>Supported formats: PNG, JPG, PDF</p>
+</div>
+<!-- Tips Accordion/Card -->
+<div class="flex flex-col gap-4 mt-2">
+<h3 class="text-base font-bold text-text-main dark:text-white px-1">How to get the best results</h3>
+<div class="bg-white dark:bg-white/5 rounded-xl p-5 border border-gray-100 dark:border-gray-800 shadow-sm">
+<ul class="space-y-4">
+<li class="flex gap-3 items-start">
+<span class="material-symbols-outlined text-[20px] text-primary mt-0.5">wb_sunny</span>
+<div>
+<p class="text-sm font-bold text-text-main dark:text-gray-200">Ensure clear lighting</p>
+<p class="text-xs text-text-muted dark:text-gray-400 mt-0.5">Avoid shadows covering important corners.</p>
+</div>
+</li>
+<li class="flex gap-3 items-start">
+<span class="material-symbols-outlined text-[20px] text-primary mt-0.5">label</span>
+<div>
+<p class="text-sm font-bold text-text-main dark:text-gray-200">Include room labels</p>
+<p class="text-xs text-text-muted dark:text-gray-400 mt-0.5">Kitchen, Master Bedroom, Entrance, etc.</p>
+</div>
+</li>
+<li class="flex gap-3 items-start">
+<span class="material-symbols-outlined text-[20px] text-primary mt-0.5">crop_free</span>
+<div>
+<p class="text-sm font-bold text-text-main dark:text-gray-200">Capture entire boundary</p>
+<p class="text-xs text-text-muted dark:text-gray-400 mt-0.5">The outer shape of the plot is crucial.</p>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</main>
+<!-- Fixed Footer -->
+<div class="fixed bottom-0 left-0 right-0 p-4 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-lg border-t border-gray-200 dark:border-gray-800 z-50">
+<div class="max-w-md mx-auto">
+<button class="w-full h-14 bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 rounded-xl font-bold text-base flex items-center justify-center gap-2 cursor-not-allowed transition-all" disabled="">
+<span class="material-symbols-outlined text-[20px]">explore</span>
+<span>Continue to Direction Setup</span>
+</button>
+<!-- 
+                NOTE: This is the active state style for reference when a file is uploaded:
+                class="w-full h-14 bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/25 rounded-xl font-bold text-base flex items-center justify-center gap-2 active:scale-[0.98] transition-all"
+            -->
+</div>
+</div>
+</body></html>
