@@ -1,6 +1,6 @@
 /**
- * VastuWise AI - Login Screen
- * Features: Google Sign-In, Email/Password authentication, Responsive design
+ * VastuWise AI - Sign Up Screen
+ * Features: Email/Password registration, Google Sign-In, Form validation
  * Built with React Native core components
  */
 
@@ -15,7 +15,6 @@ import {
   Dimensions,
   StatusBar,
   Platform,
-  Image,
   KeyboardAvoidingView,
   Alert,
   Linking,
@@ -23,34 +22,59 @@ import {
 import { colors, typography, spacing, borderRadius } from '../theme';
 import { setToken, setUserData } from '../services/storage.service';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
-interface LoginScreenProps {
+interface SignUpScreenProps {
   navigation?: any;
 }
 
-const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
+const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
+  // Focus states
+  const [nameFocused, setNameFocused] = useState(false);
   const [emailFocused, setEmailFocused] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [confirmPasswordFocused, setConfirmPasswordFocused] = useState(false);
 
-  const handleLogin = async () => {
-    if (!email.trim() || !password) {
-      Alert.alert('Validation Error', 'Please enter email and password');
-      return;
+  const validateForm = (): boolean => {
+    if (!name.trim()) {
+      Alert.alert('Validation Error', 'Please enter your name');
+      return false;
     }
+    if (!email.trim() || !email.includes('@')) {
+      Alert.alert('Validation Error', 'Please enter a valid email address');
+      return false;
+    }
+    if (password.length < 6) {
+      Alert.alert('Validation Error', 'Password must be at least 6 characters');
+      return false;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert('Validation Error', 'Passwords do not match');
+      return false;
+    }
+    return true;
+  };
+
+  const handleSignUp = async () => {
+    if (!validateForm()) return;
 
     setLoading(true);
     try {
-      const response = await fetch('http://10.0.2.2:3000/api/auth/login', {
+      const response = await fetch('http://10.0.2.2:3000/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          name: name.trim(),
           email: email.trim().toLowerCase(),
           password,
         }),
@@ -63,39 +87,41 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         await setToken(data.token);
         await setUserData(data.user);
         
-        // Navigate to Welcome screen with drawer
-        if (navigation) {
-          navigation.replace('Welcome');
-        }
+        Alert.alert('Success', 'Account created successfully!', [
+          {
+            text: 'OK',
+            onPress: () => {
+              // Navigate to Welcome screen with drawer
+              if (navigation) {
+                navigation.replace('Welcome');
+              }
+            },
+          },
+        ]);
       } else {
-        Alert.alert('Login Failed', data.error || 'Invalid credentials');
+        Alert.alert('Sign Up Failed', data.error || 'Something went wrong');
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Sign up error:', error);
       Alert.alert('Error', 'Unable to connect to server. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleGoogleSignUp = async () => {
     try {
       const googleAuthUrl = 'http://10.0.2.2:3000/api/auth/google'; // Use 10.0.2.2 for Android emulator
       await Linking.openURL(googleAuthUrl);
     } catch (error) {
-      console.error('Google sign-in error:', error);
-      Alert.alert('Error', 'Failed to open Google sign-in. Make sure the backend server is running.');
+      console.error('Google sign-up error:', error);
+      Alert.alert('Error', 'Failed to open Google sign-up. Make sure the backend server is running.');
     }
   };
 
-  const handleForgotPassword = () => {
-    console.log('Forgot password');
-    // Navigate to forgot password screen
-  };
-
-  const handleSignUp = () => {
+  const handleLogin = () => {
     if (navigation) {
-      navigation.navigate('SignUp');
+      navigation.navigate('Login');
     } else {
       console.log('Navigation not configured');
     }
@@ -127,21 +153,22 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             <View style={styles.logoContainer}>
               <Text style={styles.logoIcon}>🏛️</Text>
             </View>
-            <Text style={styles.appTitle}>VastuWise AI</Text>
-            <Text style={styles.appSubtitle}>Ancient Wisdom meets Modern AI</Text>
+            <Text style={styles.appTitle}>Create Account</Text>
+            <Text style={styles.appSubtitle}>Join VastuWise AI today</Text>
           </View>
 
-          {/* Social Login Section */}
+          {/* Social Sign Up Section */}
           <View style={styles.socialLoginSection}>
             <TouchableOpacity
               style={styles.googleButton}
               activeOpacity={0.8}
-              onPress={handleGoogleSignIn}
+              onPress={handleGoogleSignUp}
+              disabled={loading}
             >
               <View style={styles.googleIconContainer}>
                 <Text style={styles.googleIcon}>G</Text>
               </View>
-              <Text style={styles.googleButtonText}>Sign in with Google</Text>
+              <Text style={styles.googleButtonText}>Sign up with Google</Text>
             </TouchableOpacity>
           </View>
 
@@ -152,8 +179,31 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
             <View style={styles.dividerLine} />
           </View>
 
-          {/* Login Form */}
+          {/* Sign Up Form */}
           <View style={styles.formSection}>
+            {/* Name Field */}
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Full Name</Text>
+              <View
+                style={[
+                  styles.inputContainer,
+                  nameFocused && styles.inputContainerFocused,
+                ]}
+              >
+                <TextInput
+                  style={styles.input}
+                  placeholder="Enter your full name"
+                  placeholderTextColor={colors.textSecondary}
+                  value={name}
+                  onChangeText={setName}
+                  onFocus={() => setNameFocused(true)}
+                  onBlur={() => setNameFocused(false)}
+                  autoCapitalize="words"
+                  editable={!loading}
+                />
+              </View>
+            </View>
+
             {/* Email Field */}
             <View style={styles.inputGroup}>
               <Text style={styles.inputLabel}>Email Address</Text>
@@ -174,6 +224,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                   keyboardType="email-address"
                   autoCapitalize="none"
                   autoComplete="email"
+                  editable={!loading}
                 />
               </View>
             </View>
@@ -189,7 +240,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
               >
                 <TextInput
                   style={styles.input}
-                  placeholder="Enter your password"
+                  placeholder="Create a password (min 6 characters)"
                   placeholderTextColor={colors.textSecondary}
                   value={password}
                   onChangeText={setPassword}
@@ -198,42 +249,80 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                   secureTextEntry={!showPassword}
                   autoCapitalize="none"
                   autoComplete="password"
+                  editable={!loading}
                 />
                 <TouchableOpacity
                   style={styles.passwordToggle}
                   onPress={() => setShowPassword(!showPassword)}
+                  disabled={loading}
                 >
                   <Text style={styles.passwordToggleIcon}>
                     {showPassword ? '👁️' : '👁️‍🗨️'}
                   </Text>
                 </TouchableOpacity>
               </View>
-              
-              {/* Forgot Password Link */}
-              <TouchableOpacity onPress={handleForgotPassword} style={styles.forgotPasswordContainer}>
-                <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-              </TouchableOpacity>
             </View>
 
-            {/* Login Button */}
+            {/* Confirm Password Field */}
+            <View style={styles.inputGroup}>
+              <Text style={styles.inputLabel}>Confirm Password</Text>
+              <View
+                style={[
+                  styles.inputContainer,
+                  confirmPasswordFocused && styles.inputContainerFocused,
+                ]}
+              >
+                <TextInput
+                  style={styles.input}
+                  placeholder="Re-enter your password"
+                  placeholderTextColor={colors.textSecondary}
+                  value={confirmPassword}
+                  onChangeText={setConfirmPassword}
+                  onFocus={() => setConfirmPasswordFocused(true)}
+                  onBlur={() => setConfirmPasswordFocused(false)}
+                  secureTextEntry={!showConfirmPassword}
+                  autoCapitalize="none"
+                  autoComplete="password"
+                  editable={!loading}
+                />
+                <TouchableOpacity
+                  style={styles.passwordToggle}
+                  onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+                  disabled={loading}
+                >
+                  <Text style={styles.passwordToggleIcon}>
+                    {showConfirmPassword ? '👁️' : '👁️‍🗨️'}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            {/* Sign Up Button */}
             <TouchableOpacity
-              style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+              style={[styles.signUpButton, loading && styles.signUpButtonDisabled]}
               activeOpacity={0.8}
-              onPress={handleLogin}
+              onPress={handleSignUp}
               disabled={loading}
             >
-              <Text style={styles.loginButtonText}>
-                {loading ? 'Logging in...' : 'Login'}
+              <Text style={styles.signUpButtonText}>
+                {loading ? 'Creating Account...' : 'Create Account'}
               </Text>
             </TouchableOpacity>
+
+            {/* Terms & Privacy */}
+            <Text style={styles.termsText}>
+              By signing up, you agree to our{' '}
+              <Text style={styles.termsLink}>Terms of Service</Text> and{' '}
+              <Text style={styles.termsLink}>Privacy Policy</Text>
+            </Text>
           </View>
 
           {/* Footer Section */}
           <View style={styles.footerSection}>
             <Text style={styles.footerText}>
-              Don't have an account?{' '}
-              <Text style={styles.signUpLink} onPress={handleSignUp}>
-                Sign Up
+              Already have an account?{' '}
+              <Text style={styles.loginLink} onPress={handleLogin}>
+                Login
               </Text>
             </Text>
           </View>
@@ -287,8 +376,8 @@ const styles = StyleSheet.create({
   brandingSection: {
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
-    paddingBottom: spacing.xl,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.lg,
   },
   logoContainer: {
     width: 64,
@@ -297,7 +386,7 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.lg,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
@@ -308,10 +397,10 @@ const styles = StyleSheet.create({
     fontSize: 32,
   },
   appTitle: {
-    fontSize: typography.fontSize['3xl'],
+    fontSize: typography.fontSize['2xl'],
     fontWeight: typography.fontWeight.bold,
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.xs,
     letterSpacing: typography.letterSpacing.tight,
   },
   appSubtitle: {
@@ -366,7 +455,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.lg,
+    paddingVertical: spacing.md,
     gap: spacing.md,
   },
   dividerLine: {
@@ -425,53 +514,56 @@ const styles = StyleSheet.create({
   passwordToggleIcon: {
     fontSize: 20,
   },
-  forgotPasswordContainer: {
-    alignSelf: 'flex-end',
-    marginTop: spacing.xs,
-    paddingVertical: spacing.xs,
-  },
-  forgotPasswordText: {
-    fontSize: typography.fontSize.sm,
-    fontWeight: typography.fontWeight.bold,
-    color: colors.primary,
-  },
 
-  // Login Button
-  loginButton: {
+  // Sign Up Button
+  signUpButton: {
     width: '100%',
     height: 56,
     backgroundColor: colors.primary,
     borderRadius: borderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.25,
     shadowRadius: 10,
     elevation: 8,
   },
-  loginButtonDisabled: {
+  signUpButtonDisabled: {
     opacity: 0.6,
   },
-  loginButtonText: {
+  signUpButtonText: {
     fontSize: typography.fontSize.lg,
     fontWeight: typography.fontWeight.bold,
     color: colors.textLight,
     letterSpacing: typography.letterSpacing.wide,
   },
 
+  // Terms
+  termsText: {
+    fontSize: typography.fontSize.xs,
+    color: colors.textSecondary,
+    textAlign: 'center',
+    marginTop: spacing.sm,
+    lineHeight: 18,
+  },
+  termsLink: {
+    color: colors.primary,
+    fontWeight: typography.fontWeight.semibold,
+  },
+
   // Footer
   footerSection: {
     alignItems: 'center',
-    paddingTop: spacing.xl,
+    paddingTop: spacing.lg,
     paddingHorizontal: spacing.lg,
   },
   footerText: {
     fontSize: typography.fontSize.base,
     color: colors.textSecondary,
   },
-  signUpLink: {
+  loginLink: {
     color: colors.primary,
     fontWeight: typography.fontWeight.bold,
   },
@@ -487,4 +579,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default SignUpScreen;

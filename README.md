@@ -1,15 +1,42 @@
-# VastuWise AI - React Native Mobile App
+# VastuWise AI - React Native Mobile App with Authentication
 
-A mobile application for Vastu Shastra analysis built with React Native and TypeScript.
+A mobile application for Vastu Shastra analysis built with React Native, TypeScript, Express, Prisma, and PostgreSQL.
 
-## 🎨 Features Implemented
+## 🚀 Quick Start
 
-### ✅ Screens Created
-1. **Welcome/Onboarding Screen** - Features grid with app introduction
-2. **Login Screen** - Authentication with Google Sign-In and email/password
+```bash
+# Automated setup (Windows)
+setup.bat
+
+# Or manual setup - see QUICK_START.md
+```
+
+## 🎯 Features Implemented
+
+### ✅ Authentication System
+- **Email/Password Authentication** - Secure signup and login
+- **Google OAuth Integration** - One-click social authentication
+- **JWT Token Management** - Secure session handling
+- **Password Security** - bcrypt hashing with salt rounds
+- **Token Storage** - AsyncStorage for persistent sessions
+
+### ✅ Screens
+1. **WelcomeScreen** - Features grid with app introduction
+2. **LoginScreen** - Email/password + Google OAuth authentication
+3. **SignUpScreen** - User registration with validation
+4. **DashboardScreen** - Protected screen (post-login)
+5. **ProfileFormScreen** - User profile management
+
+### ✅ Backend API (Node.js + Express + Prisma)
+- **RESTful API** - Complete authentication endpoints
+- **PostgreSQL Database** - Prisma ORM with type safety
+- **Google OAuth** - Passport.js integration
+- **JWT Authentication** - Secure token-based auth
+- **Input Validation** - express-validator middleware
+- **Error Handling** - Comprehensive error responses
 
 ### ✅ Reusable Components
-- `CustomButton` - Primary, secondary, and outline button variants
+- `CustomButton` - Primary, secondary, and outline variants
 - `CustomTextInput` - Labeled input with validation and password toggle
 - `CustomCard` - Glass morphism and solid card variants
 
@@ -18,25 +45,144 @@ A mobile application for Vastu Shastra analysis built with React Native and Type
 - **Typography** - Font families, sizes, weights, and line heights
 - **Spacing** - Consistent spacing scale and border radius system
 
-## 📱 Responsive Mobile Design
+### ✅ Services & Utilities
+- **AuthService** - API call management
+- **StorageService** - Token and user data persistence
+- **Google Auth Util** - OAuth flow handling
+- **API Config** - Centralized endpoint configuration
 
-All screens are optimized with flexible layouts, safe areas, and keyboard handling.
-
-## 🏗️ Project Structure
+## 📂 Project Structure
 
 ```
-MadApp/
+Vastu-Analyzer-mad/
+├── backend/                    # Backend API Server
+│   ├── prisma/
+│   │   └── schema.prisma      # Database schema
+│   ├── src/
+│   │   ├── config/            # Database & OAuth config
+│   │   ├── middleware/        # Auth & error middleware
+│   │   ├── routes/            # API routes
+│   │   ├── utils/             # JWT & password utilities
+│   │   └── index.ts           # Server entry
+│   ├── .env.example           # Environment template
+│   └── package.json
+│
 ├── src/
-│   ├── screens/         # WelcomeScreen, LoginScreen
-│   ├── components/      # CustomButton, CustomTextInput, CustomCard
-│   └── theme/          # colors, typography, spacing
-├── App.tsx             # Main entry point
+│   ├── screens/               # All screens
+│   │   ├── WelcomeScreen.tsx
+│   │   ├── LoginScreen.tsx    # ✅ API integrated
+│   │   ├── SignUpScreen.tsx   # ✅ NEW
+│   │   ├── DashboardScreen.tsx
+│   │   └── ProfileFormScreen.tsx
+│   ├── components/            # Reusable components
+│   ├── services/              # ✅ API services
+│   ├── config/                # ✅ API configuration
+│   ├── utils/                 # ✅ Helper functions
+│   └── theme/                 # Design system
+│
+├── QUICK_START.md             # 🚀 Start here!
+├── AUTHENTICATION_GUIDE.md    # Auth implementation details
+├── MOBILE_SETUP.md            # Mobile app setup
+├── backend/README.md          # Backend setup guide
+├── setup.bat / setup.sh       # Automated setup scripts
 └── package.json
+```
+
+## 📚 Documentation
+
+- **[QUICK_START.md](./QUICK_START.md)** - Get up and running in 5 minutes
+- **[AUTHENTICATION_GUIDE.md](./AUTHENTICATION_GUIDE.md)** - Complete auth implementation
+- **[backend/README.md](./backend/README.md)** - Backend setup and deployment
+- **[MOBILE_SETUP.md](./MOBILE_SETUP.md)** - Mobile app configuration
+
+## 🔐 Authentication Flow
+
+1. **Sign Up**: User creates account with email/password or Google OAuth
+2. **Login**: User authenticates and receives JWT token
+3. **Token Storage**: Token saved in AsyncStorage
+4. **Protected Routes**: Token sent with API requests
+5. **Profile Management**: User can update profile data
+
+## 🛠️ Tech Stack
+
+### Frontend (Mobile)
+- React Native 0.83.1
+- TypeScript
+- AsyncStorage (token persistence)
+- Expo Web Browser & Auth Session (OAuth)
+
+### Backend (API)
+- Node.js + Express
+- Prisma ORM
+- PostgreSQL
+- Passport.js (Google OAuth)
+- JWT (jsonwebtoken)
+- bcryptjs (password hashing)
+
+## 📋 API Endpoints
+
+```
+POST   /api/auth/signup          - Create account
+POST   /api/auth/login           - Email/password login
+GET    /api/auth/google          - Initiate Google OAuth
+GET    /api/auth/google/callback - OAuth callback
+GET    /api/auth/verify          - Verify JWT token
+GET    /api/user/profile         - Get user profile (protected)
+PUT    /api/user/profile         - Update profile (protected)
 ```
 
 # Getting Started
 
 > **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+
+## Quick Setup
+
+### 1. Install Dependencies
+
+```bash
+# Backend
+cd backend
+npm install
+
+# Mobile App
+cd ..
+npm install
+```
+
+### 2. Set Up Database
+
+Use [Supabase](https://supabase.com) (free) or local PostgreSQL:
+
+```bash
+# Create backend/.env file
+cp backend/.env.example backend/.env
+
+# Update DATABASE_URL in backend/.env
+DATABASE_URL="postgresql://user:password@localhost:5432/vastu_analyzer"
+```
+
+### 3. Initialize Database
+
+```bash
+cd backend
+npm run prisma:generate
+npm run prisma:migrate
+```
+
+### 4. Start Backend
+
+```bash
+cd backend
+npm run dev
+# Server running on http://localhost:3000
+```
+
+### 5. Start Mobile App
+
+```bash
+# In a new terminal
+npm run android  # or npm run ios
+```
 
 ## Step 1: Start Metro
 

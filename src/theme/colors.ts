@@ -49,4 +49,6 @@ export const colors = {
   primaryOpacity: (opacity: number) => `rgba(219, 119, 6, ${opacity})`,
   whiteOpacity: (opacity: number) => `rgba(255, 255, 255, ${opacity})`,
   blackOpacity: (opacity: number) => `rgba(0, 0, 0, ${opacity})`,
+  errorOpacity: (opacity: number) => `rgba(239, 68, 68, ${opacity})`,
+  successOpacity: (opacity: number) => `rgba(34, 197, 94, ${opacity})`,
 };

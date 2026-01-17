@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String?   // Null for OAuth users
+  name          String?
+  googleId      String?   @unique
+  profilePicture String?
+  phoneNumber   String?
+  address       String?
+  dateOfBirth   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Vastu Analysis related fields
+  analyses      VastuAnalysis[]
+  
+  @@map("users")
+}
+
+model VastuAnalysis {
+  id          String   @id @default(uuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  floorPlanUrl String?
+  score       Float?
+  direction   String?
+  doshas      Json?    // Store dosha details as JSON
+  remedies    Json?    // Store remedies as JSON
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("vastu_analyses")
+}

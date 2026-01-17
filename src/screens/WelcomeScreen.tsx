@@ -16,8 +16,13 @@ import {
   Platform,
 } from 'react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
+import CustomDrawer from '../components/CustomDrawer';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+
+interface WelcomeScreenProps {
+  navigation?: any;
+}
 
 // Feature Card Component
 interface FeatureCardProps {
@@ -40,7 +45,9 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) =
   );
 };
 
-const WelcomeScreen: React.FC = () => {
+const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
+  const [drawerVisible, setDrawerVisible] = React.useState(false);
+  
   const features = [
     {
       icon: '🧭',
@@ -69,7 +76,7 @@ const WelcomeScreen: React.FC = () => {
       <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundLight} />
       
       {/* Background Pattern Overlay */}
-      <View style={styles.patternOverlay} />
+      <View style={styles.patternOverlay} pointerEvents="none" />
       
       <ScrollView
         contentContainerStyle={styles.scrollContent}
@@ -143,6 +150,25 @@ const WelcomeScreen: React.FC = () => {
           </View>
         </View>
       </ScrollView>
+
+      {/* Menu Button - Outside ScrollView */}
+      <TouchableOpacity
+        style={styles.menuButton}
+        onPress={() => {
+          console.log('Menu button pressed');
+          setDrawerVisible(true);
+        }}
+        activeOpacity={0.7}
+      >
+        <Text style={styles.menuIcon}>☰</Text>
+      </TouchableOpacity>
+
+      {/* Custom Drawer */}
+      <CustomDrawer
+        visible={drawerVisible}
+        onClose={() => setDrawerVisible(false)}
+        navigation={navigation}
+      />
     </View>
   );
 };
@@ -152,6 +178,28 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backgroundLight,
   },
+  menuButton: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 50 : 20,
+    left: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.surfaceLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+    shadowColor: colors.blackOpacity(0.2),
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 10,
+  },
+  menuIcon: {
+    fontSize: 24,
+    color: colors.textPrimary,
+    fontWeight: typography.fontWeight.bold,
+  },
   patternOverlay: {
     position: 'absolute',
     top: 0,
@@ -160,6 +208,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     opacity: 0.05,
     backgroundColor: colors.backgroundLight,
+    zIndex: -1,
   },
   scrollContent: {
     flexGrow: 1,
