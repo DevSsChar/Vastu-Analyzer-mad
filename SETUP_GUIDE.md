@@ -1,6 +1,71 @@
 # VastuWise AI - Configuration & Setup Guide
 
-## 📋 App Configuration
+## � Quick Setup
+
+### 1. Backend Setup
+```bash
+cd backend
+npm install
+cp .env.example .env
+
+# Update .env with your database credentials
+# DATABASE_URL="postgresql://user:password@localhost:5432/vastu_analyzer"
+# JWT_SECRET="your-secret-key"
+# GOOGLE_CLIENT_ID="your-client-id"
+# GOOGLE_CLIENT_SECRET="your-client-secret"
+
+npm run prisma:generate
+npm run prisma:migrate
+npm run dev
+```
+
+### 2. Mobile App Setup
+```bash
+cd ..
+npm install
+npm run android  # or npm run ios
+```
+
+---
+
+## 📋 Backend Configuration
+
+### Environment Variables
+**File:** `backend/.env`
+
+```env
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/vastu_analyzer"
+
+# JWT
+JWT_SECRET="your-super-secret-key-here"
+JWT_EXPIRES_IN="7d"
+
+# Google OAuth
+GOOGLE_CLIENT_ID="your-google-client-id.apps.googleusercontent.com"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+GOOGLE_CALLBACK_URL="http://localhost:3000/api/auth/google/callback"
+
+# Server
+PORT=3000
+NODE_ENV="development"
+```
+
+### Database Migration
+```bash
+# Generate Prisma client
+npm run prisma:generate
+
+# Create/migrate database
+npm run prisma:migrate
+
+# View database (optional)
+npm run prisma:studio
+```
+
+---
+
+## 📋 Mobile App Configuration
 
 ### 1. App Name & Package Name Configuration
 
@@ -50,6 +115,84 @@ PRODUCT_BUNDLE_IDENTIFIER = com.vastuwiseai;
 1. Open Xcode
 2. Select project root in navigator
 3. In Identity section, update "Bundle Identifier"
+
+## 🔐 Authentication Configuration
+
+### AsyncStorage Setup
+**File:** `src/services/storage.service.ts`
+
+The storage service automatically handles token and user data persistence:
+
+```typescript
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Automatically stores and retrieves:
+// - JWT token
+// - User name, email, profile picture
+// - Session state
+
+// Usage in components:
+import { setToken, getToken, setUserData, getUserData, clearStorage } from '../services/storage.service';
+```
+
+### JWT Token Management
+**File:** `src/screens/LoginScreen.tsx`
+
+Token is automatically stored after login:
+```typescript
+// On successful login:
+await setToken(response.data.token);
+await setUserData({
+  name: response.data.user.name,
+  email: response.data.user.email,
+  profilePicture: response.data.user.profilePicture,
+});
+```
+
+---
+
+## 🧭 Navigation Setup
+
+### Stack Navigator Configuration
+**File:** `App.tsx`
+
+```typescript
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+// Screen order: Login → SignUp → Welcome → Dashboard
+const Stack = createNativeStackNavigator();
+
+<NavigationContainer>
+  <Stack.Navigator
+    screenOptions={{ headerShown: false }}
+    initialRouteName="Login"
+  >
+    <Stack.Screen name="Login" component={LoginScreen} />
+    <Stack.Screen name="SignUp" component={SignUpScreen} />
+    <Stack.Screen name="Welcome" component={WelcomeScreen} />
+    <Stack.Screen name="Dashboard" component={DashboardScreen} />
+  </Stack.Navigator>
+</NavigationContainer>
+```
+
+### Drawer Menu
+**File:** `src/components/CustomDrawer.tsx`
+
+The drawer appears after login on WelcomeScreen:
+```typescript
+// Menu button opens drawer
+<TouchableOpacity onPress={() => setDrawerVisible(true)}>
+  <Text>☰</Text>
+</TouchableOpacity>
+
+// Drawer displays user profile and navigation options
+<CustomDrawer
+  visible={drawerVisible}
+  onClose={() => setDrawerVisible(false)}
+  onNavigate={(screen) => navigation.navigate(screen)}
+/>
+```
 
 ---
 

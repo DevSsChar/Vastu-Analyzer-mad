@@ -56,7 +56,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         }),
       });
 
-      const data = await response.json();
+      const data: any = await response.json();
 
       if (response.ok) {
         // Store token and user data

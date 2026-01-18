@@ -41,13 +41,13 @@ class AuthService {
         body: JSON.stringify(credentials),
       });
 
-      const data = await response.json();
+      const data: any = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || 'Login failed');
       }
 
-      return data;
+      return data as AuthResponse;
     } catch (error) {
       throw error;
     }
@@ -64,13 +64,13 @@ class AuthService {
         body: JSON.stringify(signupData),
       });
 
-      const data = await response.json();
+      const data: any = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || 'Sign up failed');
       }
 
-      return data;
+      return data as AuthResponse;
     } catch (error) {
       throw error;
     }
@@ -89,7 +89,7 @@ class AuthService {
         },
       });
 
-      const data = await response.json();
+      const data: any = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || 'Token verification failed');
@@ -114,7 +114,7 @@ class AuthService {
         },
       });
 
-      const data = await response.json();
+      const data: any = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to get profile');
@@ -140,7 +140,7 @@ class AuthService {
         body: JSON.stringify(profileData),
       });
 
-      const data = await response.json();
+      const data: any = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || 'Failed to update profile');

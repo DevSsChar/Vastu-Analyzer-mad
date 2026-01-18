@@ -146,6 +146,84 @@ const [error, setError] = useState('');
 
 ---
 
+### 🎯 CustomDrawer
+
+#### Basic Usage
+```typescript
+import CustomDrawer from '../components/CustomDrawer';
+import { useNavigation } from '@react-navigation/native';
+
+export const WelcomeScreen = () => {
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const navigation = useNavigation();
+
+  return (
+    <View>
+      {/* Menu Button */}
+      <TouchableOpacity 
+        style={styles.menuButton}
+        onPress={() => setDrawerVisible(true)}
+      >
+        <Text style={styles.menuIcon}>☰</Text>
+      </TouchableOpacity>
+
+      {/* Drawer Component */}
+      <CustomDrawer
+        visible={drawerVisible}
+        userData={{
+          name: "John Doe",
+          email: "john@example.com",
+          profilePicture: null,
+        }}
+        onClose={() => setDrawerVisible(false)}
+        onNavigate={(screen) => {
+          setDrawerVisible(false);
+          navigation.navigate(screen);
+        }}
+        onLogout={() => {
+          setDrawerVisible(false);
+          // Handle logout
+          navigation.navigate('Login');
+        }}
+      />
+    </View>
+  );
+};
+```
+
+#### Drawer Features
+- **Animated Slide**: 300ms open, 250ms close transition
+- **User Profile**: Avatar (first letter), name, email display
+- **Menu Items**: Customizable navigation options
+- **Logout Button**: With confirmation dialog
+- **Overlay Tap**: Close drawer by tapping overlay
+
+#### Styling Drawer
+```typescript
+// The drawer uses Modal and Animated.View internally
+// Animation is handled automatically with smooth transitions
+
+// Drawer overlay background (semi-transparent)
+overlayOpacity: 0.5
+
+// Drawer width: 80% of screen
+// Slide distance: 0 to -250 (depends on screen width)
+```
+
+#### Menu Items
+```typescript
+// Default menu items in CustomDrawer:
+const menuItems = [
+  { label: 'Home', icon: '🏠', screen: 'Welcome' },
+  { label: 'Dashboard', icon: '📊', screen: 'Dashboard' },
+  { label: 'Profile', icon: '👤', screen: 'Profile' },
+  { label: 'Learn Vastu', icon: '📚', screen: 'Learn' },
+  { label: 'Settings', icon: '⚙️', screen: 'Settings' },
+];
+```
+
+---
+
 ## 📐 Layout Patterns
 
 ### Centered Content

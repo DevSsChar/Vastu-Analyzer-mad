@@ -1,44 +1,62 @@
 # VastuWise AI - React Native Mobile App with Authentication
 
-A mobile application for Vastu Shastra analysis built with React Native, TypeScript, Express, Prisma, and PostgreSQL.
+A mobile application for Vastu Shastra analysis built with React Native, TypeScript, Express, Prisma, and PostgreSQL. Features complete user authentication with email/password and Google OAuth, persistent login state, and a custom drawer navigation menu.
 
 ## 🚀 Quick Start
 
 ```bash
-# Automated setup (Windows)
-setup.bat
+# Install backend dependencies
+cd backend
+npm install
 
-# Or manual setup - see QUICK_START.md
+# Install mobile app dependencies
+cd ..
+npm install
+
+# Setup environment variables
+cp backend/.env.example backend/.env
+# Update DATABASE_URL and Google OAuth credentials in backend/.env
+
+# Start backend
+cd backend
+npm run dev
+
+# In a new terminal, start mobile app
+npm run android  # or npm run ios
 ```
 
 ## 🎯 Features Implemented
 
 ### ✅ Authentication System
-- **Email/Password Authentication** - Secure signup and login
-- **Google OAuth Integration** - One-click social authentication
-- **JWT Token Management** - Secure session handling
-- **Password Security** - bcrypt hashing with salt rounds
-- **Token Storage** - AsyncStorage for persistent sessions
+- **Email/Password Authentication** - Secure signup and login with validation
+- **Google OAuth Integration** - Configured with OAuth 2.0 credentials (in progress)
+- **JWT Token Management** - Secure token-based session handling
+- **Password Security** - bcrypt hashing with salt rounds (10)
+- **Token Storage** - AsyncStorage for persistent sessions across app restarts
+- **Persistent Login** - User data and token automatically restored on app launch
 
 ### ✅ Screens
-1. **WelcomeScreen** - Features grid with app introduction
-2. **LoginScreen** - Email/password + Google OAuth authentication
-3. **SignUpScreen** - User registration with validation
-4. **DashboardScreen** - Protected screen (post-login)
-5. **ProfileFormScreen** - User profile management
+1. **LoginScreen** - Email/password authentication with validation, API integration, links to SignUp
+2. **SignUpScreen** - User registration with email, password, name fields, real-time validation
+3. **WelcomeScreen** - Onboarding page with feature grid, menu button (☰), and smooth animations
+4. **CustomDrawer** - Side menu with user profile (avatar, name, email), menu items (Home, Dashboard, Profile, Learn Vastu, Settings), and logout button
+5. **DashboardScreen** - Protected screen template for post-authentication content
+6. **ProfileFormScreen** - User profile management form template
 
 ### ✅ Backend API (Node.js + Express + Prisma)
-- **RESTful API** - Complete authentication endpoints
-- **PostgreSQL Database** - Prisma ORM with type safety
-- **Google OAuth** - Passport.js integration
-- **JWT Authentication** - Secure token-based auth
-- **Input Validation** - express-validator middleware
-- **Error Handling** - Comprehensive error responses
+- **RESTful API** - Complete authentication endpoints (signup, login, profile management)
+- **PostgreSQL Database** - Prisma ORM with type safety, automatically migrated
+- **Google OAuth** - Passport.js integration configured and ready for testing
+- **JWT Authentication** - Secure token-based auth with JWT signing and verification
+- **Input Validation** - express-validator middleware for email, password, and name fields
+- **Error Handling** - Comprehensive error responses with proper HTTP status codes
+- **Database Models** - User (with email, password, name, googleId, profile fields) and VastuAnalysis tables
 
 ### ✅ Reusable Components
-- `CustomButton` - Primary, secondary, and outline variants
-- `CustomTextInput` - Labeled input with validation and password toggle
-- `CustomCard` - Glass morphism and solid card variants
+- `CustomButton` - Primary, secondary, and outline variants with loading/disabled states
+- `CustomTextInput` - Labeled input with validation, password toggle, and error display
+- `CustomCard` - Glass morphism and solid card variants with icon support
+- `CustomDrawer` - Custom Modal-based drawer with animated slide transitions and user profile display
 
 ### ✅ Theme System
 - **Colors** - Centralized color palette with primary (#db7706)
@@ -69,13 +87,19 @@ Vastu-Analyzer-mad/
 │
 ├── src/
 │   ├── screens/               # All screens
-│   │   ├── WelcomeScreen.tsx
-│   │   ├── LoginScreen.tsx    # ✅ API integrated
-│   │   ├── SignUpScreen.tsx   # ✅ NEW
-│   │   ├── DashboardScreen.tsx
-│   │   └── ProfileFormScreen.tsx
+│   │   ├── LoginScreen.tsx    # ✅ Email/password auth, API integrated
+│   │   ├── SignUpScreen.tsx   # ✅ User registration with validation
+│   │   ├── WelcomeScreen.tsx  # ✅ Onboarding with feature grid and menu button
+│   │   ├── DashboardScreen.tsx # ✅ Protected dashboard template
+│   │   └── ProfileFormScreen.tsx # ✅ Profile management template
 │   ├── components/            # Reusable components
-│   ├── services/              # ✅ API services
+│   │   ├── CustomButton.tsx
+│   │   ├── CustomTextInput.tsx
+│   │   ├── CustomCard.tsx
+│   │   └── CustomDrawer.tsx   # ✅ NEW - Modal-based side menu
+│   ├── services/              # ✅ API services and storage
+│   │   ├── storage.service.ts # ✅ AsyncStorage for token/user data
+│   │   └── auth.service.ts
 │   ├── config/                # ✅ API configuration
 │   ├── utils/                 # ✅ Helper functions
 │   └── theme/                 # Design system
@@ -97,11 +121,12 @@ Vastu-Analyzer-mad/
 
 ## 🔐 Authentication Flow
 
-1. **Sign Up**: User creates account with email/password or Google OAuth
-2. **Login**: User authenticates and receives JWT token
-3. **Token Storage**: Token saved in AsyncStorage
-4. **Protected Routes**: Token sent with API requests
-5. **Profile Management**: User can update profile data
+1. **Sign Up**: User creates account with email/password → validation → API call to `/api/auth/signup` → token received → stored in AsyncStorage
+2. **Login**: User enters credentials → validation → API call to `/api/auth/login` → JWT token received → user data stored → navigates to Welcome screen
+3. **Persistent Login**: App checks AsyncStorage on launch → if token exists, user automatically logged in → skips authentication screens
+4. **Token Storage**: JWT token and user data (name, email) saved in AsyncStorage using `storage.service.ts`
+5. **Drawer Menu**: After successful login, hamburger menu (☰) displays on Welcome screen → opens custom drawer → shows user profile and menu items → logout clears AsyncStorage
+6. **Session Management**: Token sent with protected API requests, logout clears stored credentials
 
 ## 🛠️ Tech Stack
 
@@ -121,13 +146,21 @@ Vastu-Analyzer-mad/
 
 ## 📋 API Endpoints
 
-```
-POST   /api/auth/signup          - Create account
-POST   /api/auth/login           - Email/password login
-GET    /api/auth/google          - Initiate Google OAuth
-GET    /api/auth/google/callback - OAuth callback
-GET    /api/auth/verify          - Verify JWT token
-GET    /api/user/profile         - Get user profile (protected)
+# Authentication
+POST   /api/auth/signup          - Create account (email, password, name)
+POST   /api/auth/login           - Email/password login (returns JWT token)
+GET    /api/auth/google          - Initiate Google OAuth flow
+GET    /api/auth/google/callback - OAuth callback handler
+GET    /api/auth/verify          - Verify JWT token validity (protected)
+
+# User Profile
+GET    /api/user/profile         - Get user profile data (protected)
+PUT    /api/user/profile         - Update profile info (protected)
+
+# Vastu Analysis (Future)
+POST   /api/analysis/upload      - Upload floor plan/image
+GET    /api/analysis/list        - Get user's analyses
+GET    /api/analysis/:id         - Get analysis detailsd)
 PUT    /api/user/profile         - Update profile (protected)
 ```
 
