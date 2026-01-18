@@ -66,9 +66,23 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({ visible, onClose, navigatio
           text: 'Logout',
           style: 'destructive',
           onPress: async () => {
-            await clearStorage();
-            onClose();
-            navigation.replace('Login');
+            try {
+              // Clear all session data
+              await clearStorage();
+              console.log('Session data cleared');
+              
+              // Close drawer
+              onClose();
+              
+              // Navigate to Login and reset navigation stack
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'Login' }],
+              });
+            } catch (error) {
+              console.error('Logout error:', error);
+              Alert.alert('Error', 'Failed to logout. Please try again.');
+            }
           },
         },
       ]
