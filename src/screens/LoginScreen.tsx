@@ -20,6 +20,7 @@ import {
   Alert,
   Linking,
 } from 'react-native';
+import { ArrowLeft, Eye, EyeOff, Building2 } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
 import { setToken, setUserData } from '../services/storage.service';
 
@@ -119,13 +120,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         >
           {/* Back Button */}
           <TouchableOpacity style={styles.backButton} onPress={() => console.log('Go back')}>
-            <Text style={styles.backIcon}>←</Text>
+            <ArrowLeft size={24} color={colors.textPrimary} strokeWidth={2} />
           </TouchableOpacity>
 
           {/* Branding Section */}
           <View style={styles.brandingSection}>
             <View style={styles.logoContainer}>
-              <Text style={styles.logoIcon}>🏛️</Text>
+              <Building2 size={32} color={colors.textLight} strokeWidth={2} />
             </View>
             <Text style={styles.appTitle}>VastuWise AI</Text>
             <Text style={styles.appSubtitle}>Ancient Wisdom meets Modern AI</Text>
@@ -203,9 +204,11 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
                   style={styles.passwordToggle}
                   onPress={() => setShowPassword(!showPassword)}
                 >
-                  <Text style={styles.passwordToggleIcon}>
-                    {showPassword ? '👁️' : '👁️‍🗨️'}
-                  </Text>
+                  {showPassword ? (
+                    <EyeOff size={20} color={colors.textSecondary} strokeWidth={2} />
+                  ) : (
+                    <Eye size={20} color={colors.textSecondary} strokeWidth={2} />
+                  )}
                 </TouchableOpacity>
               </View>
               
@@ -303,9 +306,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 8,
     elevation: 6,
-  },
-  logoIcon: {
-    fontSize: 32,
   },
   appTitle: {
     fontSize: typography.fontSize['3xl'],

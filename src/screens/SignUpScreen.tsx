@@ -19,6 +19,7 @@ import {
   Alert,
   Linking,
 } from 'react-native';
+import { ArrowLeft, Eye, EyeOff } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
 import { setToken, setUserData } from '../services/storage.service';
 
@@ -145,7 +146,7 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
         >
           {/* Back Button */}
           <TouchableOpacity style={styles.backButton} onPress={() => console.log('Go back')}>
-            <Text style={styles.backIcon}>←</Text>
+            <ArrowLeft size={24} color={colors.textPrimary} strokeWidth={2} />
           </TouchableOpacity>
 
           {/* Branding Section */}
@@ -256,9 +257,11 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                   onPress={() => setShowPassword(!showPassword)}
                   disabled={loading}
                 >
-                  <Text style={styles.passwordToggleIcon}>
-                    {showPassword ? '👁️' : '👁️‍🗨️'}
-                  </Text>
+                  {showPassword ? (
+                    <Eye size={20} color={colors.textSecondary} strokeWidth={2} />
+                  ) : (
+                    <EyeOff size={20} color={colors.textSecondary} strokeWidth={2} />
+                  )}
                 </TouchableOpacity>
               </View>
             </View>
@@ -290,9 +293,11 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
                   onPress={() => setShowConfirmPassword(!showConfirmPassword)}
                   disabled={loading}
                 >
-                  <Text style={styles.passwordToggleIcon}>
-                    {showConfirmPassword ? '👁️' : '👁️‍🗨️'}
-                  </Text>
+                  {showConfirmPassword ? (
+                    <Eye size={20} color={colors.textSecondary} strokeWidth={2} />
+                  ) : (
+                    <EyeOff size={20} color={colors.textSecondary} strokeWidth={2} />
+                  )}
                 </TouchableOpacity>
               </View>
             </View>

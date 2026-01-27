@@ -14,13 +14,14 @@ import {
   TouchableOpacity,
   TextInputProps,
 } from 'react-native';
+import { Eye, EyeOff, LucideIcon } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
 
 interface CustomTextInputProps extends TextInputProps {
   label?: string;
   error?: string;
-  icon?: string;
-  rightIcon?: string;
+  icon?: React.ComponentType<any>;
+  rightIcon?: React.ComponentType<any>;
   onRightIconPress?: () => void;
   containerStyle?: ViewStyle;
   inputStyle?: TextStyle;
@@ -56,7 +57,11 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
         ]}
       >
         {/* Left Icon */}
-        {icon && <Text style={styles.leftIcon}>{icon}</Text>}
+        {icon && (
+          <View style={styles.leftIcon}>
+            {React.createElement(icon, { size: 20, color: colors.textSecondary, strokeWidth: 2 })}
+          </View>
+        )}
 
         {/* Text Input */}
         <TextInput
@@ -74,16 +79,20 @@ const CustomTextInput: React.FC<CustomTextInputProps> = ({
             style={styles.rightIconButton}
             onPress={() => setIsPasswordVisible(!isPasswordVisible)}
           >
-            <Text style={styles.rightIcon}>
-              {isPasswordVisible ? '👁️' : '👁️‍🗨️'}
-            </Text>
+            {isPasswordVisible ? (
+              <Eye size={20} color={colors.textSecondary} strokeWidth={2} />
+            ) : (
+              <EyeOff size={20} color={colors.textSecondary} strokeWidth={2} />
+            )}
           </TouchableOpacity>
         ) : rightIcon ? (
           <TouchableOpacity
             style={styles.rightIconButton}
             onPress={onRightIconPress}
           >
-            <Text style={styles.rightIcon}>{rightIcon}</Text>
+            <View style={styles.rightIcon}>
+              {React.createElement(rightIcon, { size: 20, color: colors.textSecondary, strokeWidth: 2 })}
+            </View>
           </TouchableOpacity>
         ) : null}
       </View>
@@ -131,15 +140,17 @@ const styles = StyleSheet.create({
     padding: 0,
   },
   leftIcon: {
-    fontSize: 20,
     marginRight: spacing.sm,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   rightIconButton: {
     padding: spacing.sm,
     marginRight: -spacing.sm,
   },
   rightIcon: {
-    fontSize: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   errorText: {
     fontSize: typography.fontSize.xs,

@@ -15,6 +15,7 @@ import {
   StatusBar,
   Platform,
 } from 'react-native';
+import { Compass, Zap, Home, Sparkles, BarChart, Menu } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
 import CustomDrawer from '../components/CustomDrawer';
 
@@ -26,16 +27,16 @@ interface WelcomeScreenProps {
 
 // Feature Card Component
 interface FeatureCardProps {
-  icon: string;
+  IconComponent: React.ComponentType<any>;
   title: string;
   description: string;
 }
 
-const FeatureCard: React.FC<FeatureCardProps> = ({ icon, title, description }) => {
+const FeatureCard: React.FC<FeatureCardProps> = ({ IconComponent, title, description }) => {
   return (
     <View style={styles.featureCard}>
       <View style={styles.iconContainer}>
-        <Text style={styles.iconText}>{icon}</Text>
+        <IconComponent size={24} color={colors.primary} strokeWidth={2} />
       </View>
       <View style={styles.cardContent}>
         <Text style={styles.cardTitle}>{title}</Text>
@@ -50,22 +51,22 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
   
   const features = [
     {
-      icon: '🧭',
+      IconComponent: Compass,
       title: 'Directional Analysis',
       description: 'Align with nature\'s energy',
     },
     {
-      icon: '⚡',
+      IconComponent: Zap,
       title: 'Vastu Score',
       description: 'Check compliance level',
     },
     {
-      icon: '🏠',
+      IconComponent: Home,
       title: 'Dosha Detection',
       description: 'Identify energy defects',
     },
     {
-      icon: '🌸',
+      IconComponent: Sparkles,
       title: 'Vedic Remedies',
       description: 'Ancient balancing fixes',
     },
@@ -106,7 +107,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
             {features.map((feature, index) => (
               <FeatureCard
                 key={index}
-                icon={feature.icon}
+                IconComponent={feature.IconComponent}
                 title={feature.title}
                 description={feature.description}
               />
@@ -127,9 +128,9 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
           <TouchableOpacity
             style={styles.primaryButton}
             activeOpacity={0.8}
-            onPress={() => console.log('Analyze Home')}
+            onPress={() => navigation?.navigate('DirectionSetup')}
           >
-            <Text style={styles.primaryButtonIcon}>📊</Text>
+            <BarChart size={20} color={colors.textLight} strokeWidth={2} style={{ marginRight: spacing.sm }} />
             <Text style={styles.primaryButtonText}>Analyze My Home</Text>
           </TouchableOpacity>
 
@@ -160,7 +161,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
         }}
         activeOpacity={0.7}
       >
-        <Text style={styles.menuIcon}>☰</Text>
+        <Menu size={24} color={colors.textPrimary} strokeWidth={2.5} />
       </TouchableOpacity>
 
       {/* Custom Drawer */}

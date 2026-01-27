@@ -14,7 +14,7 @@ import {
 import { colors, typography, spacing, borderRadius } from '../theme';
 
 interface CustomCardProps {
-  icon?: string;
+  icon?: React.ComponentType<any>;
   title: string;
   description?: string;
   onPress?: () => void;
@@ -46,7 +46,7 @@ const CustomCard: React.FC<CustomCardProps> = ({
     >
       {icon && (
         <View style={styles.iconContainer}>
-          <Text style={styles.icon}>{icon}</Text>
+          {React.createElement(icon, { size: 24, color: colors.primary, strokeWidth: 2 })}
         </View>
       )}
       
@@ -89,9 +89,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.sm,
-  },
-  icon: {
-    fontSize: 24,
   },
   content: {
     alignItems: 'center',

@@ -13,6 +13,18 @@ import {
   Dimensions,
   StatusBar,
 } from 'react-native';
+import {
+  Search,
+  BarChart,
+  Star,
+  Home,
+  CheckCircle,
+  FileText,
+  Settings,
+  Compass,
+  Thermometer,
+  Sparkles,
+} from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
 import { CustomButton, CustomTextInput, CustomCard } from '../components';
 
@@ -31,7 +43,10 @@ const DashboardScreen: React.FC = () => {
       >
         {/* Header Section */}
         <View style={styles.header}>
-          <Text style={styles.greeting}>Welcome back! 👋</Text>
+          <View style={styles.greetingContainer}>
+            <Sparkles size={24} color={colors.primary} strokeWidth={2} />
+            <Text style={styles.greeting}>Welcome back!</Text>
+          </View>
           <Text style={styles.title}>Dashboard</Text>
         </View>
 
@@ -41,7 +56,7 @@ const DashboardScreen: React.FC = () => {
             placeholder="Search analysis..."
             value={searchQuery}
             onChangeText={setSearchQuery}
-            icon="🔍"
+            icon={Search}
             containerStyle={styles.searchInput}
           />
         </View>
@@ -51,28 +66,28 @@ const DashboardScreen: React.FC = () => {
           <Text style={styles.sectionTitle}>Quick Stats</Text>
           <View style={styles.statsGrid}>
             <CustomCard
-              icon="📊"
+              icon={BarChart}
               title="Total Scans"
               description="24 completed"
               variant="solid"
               style={styles.statCard}
             />
             <CustomCard
-              icon="⭐"
+              icon={Star}
               title="Avg Score"
               description="85/100"
               variant="solid"
               style={styles.statCard}
             />
             <CustomCard
-              icon="🏠"
+              icon={Home}
               title="Properties"
               description="3 active"
               variant="solid"
               style={styles.statCard}
             />
             <CustomCard
-              icon="✅"
+              icon={CheckCircle}
               title="Remedies"
               description="12 applied"
               variant="solid"
@@ -87,7 +102,7 @@ const DashboardScreen: React.FC = () => {
           
           <CustomButton
             title="Start New Analysis"
-            icon="🔍"
+            icon={Search}
             variant="primary"
             onPress={() => console.log('Start Analysis')}
             style={styles.actionButton}
@@ -95,7 +110,7 @@ const DashboardScreen: React.FC = () => {
           
           <CustomButton
             title="View Reports"
-            icon="📄"
+            icon={FileText}
             variant="outline"
             onPress={() => console.log('View Reports')}
             style={styles.actionButton}
@@ -103,7 +118,7 @@ const DashboardScreen: React.FC = () => {
           
           <CustomButton
             title="Settings"
-            icon="⚙️"
+            icon={Settings}
             variant="secondary"
             onPress={() => console.log('Settings')}
             style={styles.actionButton}
@@ -115,7 +130,7 @@ const DashboardScreen: React.FC = () => {
           <Text style={styles.sectionTitle}>Features</Text>
           <View style={styles.featuresGrid}>
             <CustomCard
-              icon="🧭"
+              icon={Compass}
               title="Direction"
               description="Check alignment"
               variant="glass"
@@ -123,7 +138,7 @@ const DashboardScreen: React.FC = () => {
               style={styles.featureCard}
             />
             <CustomCard
-              icon="🌡️"
+              icon={Thermometer}
               title="Heat Map"
               description="View energy flow"
               variant="glass"
@@ -172,10 +187,15 @@ const styles = StyleSheet.create({
     paddingTop: spacing.xl,
     paddingBottom: spacing.md,
   },
+  greetingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginBottom: spacing.xs,
+  },
   greeting: {
     fontSize: typography.fontSize.base,
     color: colors.textSecondary,
-    marginBottom: spacing.xs,
   },
   title: {
     fontSize: typography.fontSize['4xl'],

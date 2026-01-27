@@ -19,7 +19,7 @@ interface CustomButtonProps {
   title: string;
   onPress: () => void;
   variant?: 'primary' | 'secondary' | 'outline';
-  icon?: string;
+  icon?: React.ComponentType<any>;
   loading?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
@@ -90,7 +90,15 @@ const CustomButton: React.FC<CustomButtonProps> = ({
         />
       ) : (
         <View style={styles.buttonContent}>
-          {icon && <Text style={styles.buttonIcon}>{icon}</Text>}
+          {icon && (
+            <View style={styles.buttonIcon}>
+              {React.createElement(icon, {
+                size: size === 'small' ? 16 : size === 'medium' ? 18 : 20,
+                color: variant === 'primary' ? colors.textLight : variant === 'secondary' ? colors.textLight : colors.primary,
+                strokeWidth: 2,
+              })}
+            </View>
+          )}
           <Text style={[getTextStyle(), textStyle]}>{title}</Text>
         </View>
       )}
@@ -114,7 +122,8 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   buttonIcon: {
-    fontSize: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonText: {
     fontSize: typography.fontSize.base,

@@ -16,6 +16,10 @@ import WelcomeScreen from './src/screens/WelcomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import SignUpScreen from './src/screens/SignUpScreen';
 import DashboardScreen from './src/screens/DashboardScreen';
+import ProfileFormScreen from './src/screens/ProfileFormScreen';
+import AnalyzePlanScreen from './src/screens/AnalyzePlanScreen';
+import DirectionSetupScreen from './src/screens/DirectionSetupScreen';
+import AnalysisProgressScreen from './src/screens/AnalysisProgressScreen';
 
 // Import Storage Service
 import { getToken } from './src/services/storage.service';
@@ -94,6 +98,10 @@ function App() {
             options={{ gestureEnabled: false }}
           />
           <Stack.Screen name="Dashboard" component={DashboardScreen} />
+          <Stack.Screen name="Profile" component={ProfileFormScreen} />
+          <Stack.Screen name="AnalyzePlan" component={AnalyzePlanScreen} />
+          <Stack.Screen name="DirectionSetup" component={DirectionSetupScreen} />
+          <Stack.Screen name="AnalysisProgress" component={AnalysisProgressScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

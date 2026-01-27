@@ -3,7 +3,7 @@
  * Demonstrates form validation and error handling
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -12,11 +12,47 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
+import { User, Mail, Smartphone, Home, Info, Save, RotateCcw, ArrowLeft } from 'lucide-react-native';
 import { colors, typography, spacing } from '../theme';
 import { CustomButton, CustomTextInput } from '../components';
+import { getToken, setUserData as saveUserData } from '../services/storage.service';
+import { API_BASE_URL } from '../config/api.config';
+import { TouchableOpacity } from 'react-native';
 
-const ProfileFormScreen: React.FC = () => {
+// API Response Interfaces
+interface UserData {
+  id: string;
+  email: string;
+  name: string;
+  phoneNumber?: string;
+  address?: string;
+  profilePicture?: string;
+  dateOfBirth?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+interface GetProfileResponse {
+  user: UserData;
+}
+
+interface UpdateProfileResponse {
+  message: string;
+  user: UserData;
+}
+
+interface ErrorResponse {
+  error: string;
+  errors?: Array<{ msg: string; param: string }>;
+}
+
+interface ProfileFormScreenProps {
+  navigation?: any;
+}
+
+const ProfileFormScreen: React.FC<ProfileFormScreenProps> = ({ navigation }) => {
   // Form state
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -30,6 +66,52 @@ const ProfileFormScreen: React.FC = () => {
   
   // Loading state
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch user profile on component mount
+  useEffect(() => {
+    fetchUserProfile();
+  }, []);
+
+  const fetchUserProfile = async () => {
+    try {
+      setIsLoading(true);
+      const token = await getToken();
+      
+      if (!token) {
+        Alert.alert('Error', 'You must be logged in to view profile');
+        if (navigation) {
+          navigation.navigate('Login');
+        }
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/user/profile`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json() as GetProfileResponse | ErrorResponse;
+
+      if (response.ok && 'user' in data) {
+        setName(data.user.name || '');
+        setEmail(data.user.email || '');
+        setPhone(data.user.phoneNumber || '');
+        setAddress(data.user.address || '');
+      } else {
+        const errorData = data as ErrorResponse;
+        Alert.alert('Error', errorData.error || 'Failed to load profile');
+      }
+    } catch (error) {
+      console.error('Fetch profile error:', error);
+      Alert.alert('Error', 'Unable to connect to server');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   // Validation functions
   const validateName = (value: string): boolean => {
@@ -77,25 +159,54 @@ const ProfileFormScreen: React.FC = () => {
   const handleSubmit = async () => {
     // Validate all fields
     const isNameValid = validateName(name);
-    const isEmailValid = validateEmail(email);
     const isPhoneValid = validatePhone(phone);
 
-    if (!isNameValid || !isEmailValid || !isPhoneValid) {
+    if (!isNameValid || !isPhoneValid) {
       Alert.alert('Validation Error', 'Please fix the errors before submitting');
       return;
     }
 
-    // Simulate API call
     setIsSubmitting(true);
     
     try {
-      // Simulate network delay
-      await new Promise(resolve => setTimeout(() => resolve(undefined), 2000));
+      const token = await getToken();
       
-      console.log('Form submitted:', { name, email, phone, address });
-      Alert.alert('Success', 'Profile updated successfully!');
+      if (!token) {
+        Alert.alert('Error', 'You must be logged in to update profile');
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/user/profile`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name.trim(),
+          phoneNumber: phone.trim(),
+          address: address.trim() || null,
+        }),
+      });
+
+      const data = await response.json() as UpdateProfileResponse | ErrorResponse;
+
+      if (response.ok && 'user' in data) {
+        // Update local storage with new user data
+        await saveUserData(data.user);
+        Alert.alert('Success', 'Profile updated successfully!');
+        
+        // Navigate back or to dashboard
+        if (navigation) {
+          navigation.goBack();
+        }
+      } else {
+        const errorData = data as ErrorResponse;
+        Alert.alert('Error', errorData.error || 'Failed to update profile');
+      }
     } catch (error) {
-      Alert.alert('Error', 'Failed to update profile. Please try again.');
+      console.error('Update profile error:', error);
+      Alert.alert('Error', 'Unable to connect to server. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -112,6 +223,15 @@ const ProfileFormScreen: React.FC = () => {
     setPhoneError('');
   };
 
+  if (isLoading) {
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={styles.loadingText}>Loading profile...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView
@@ -123,6 +243,16 @@ const ProfileFormScreen: React.FC = () => {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
+          {/* Back Button */}
+          {navigation && (
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => navigation.goBack()}
+            >
+              <ArrowLeft size={24} color={colors.textPrimary} strokeWidth={2} />
+            </TouchableOpacity>
+          )}
+
           {/* Header */}
           <View style={styles.header}>
             <Text style={styles.title}>Edit Profile</Text>
@@ -141,23 +271,19 @@ const ProfileFormScreen: React.FC = () => {
               }}
               onBlur={() => validateName(name)}
               error={nameError}
-              icon="👤"
+              icon={User}
               autoCapitalize="words"
             />
 
             <CustomTextInput
-              label="Email Address *"
+              label="Email Address"
               placeholder="Enter your email"
               value={email}
-              onChangeText={(value) => {
-                setEmail(value);
-                if (emailError) validateEmail(value);
-              }}
-              onBlur={() => validateEmail(email)}
-              error={emailError}
-              icon="📧"
+              onChangeText={setEmail}
+              icon={Mail}
               keyboardType="email-address"
               autoCapitalize="none"
+              editable={false}
             />
 
             <CustomTextInput
@@ -170,7 +296,7 @@ const ProfileFormScreen: React.FC = () => {
               }}
               onBlur={() => validatePhone(phone)}
               error={phoneError}
-              icon="📱"
+              icon={Smartphone}
               keyboardType="phone-pad"
               maxLength={10}
             />
@@ -180,14 +306,14 @@ const ProfileFormScreen: React.FC = () => {
               placeholder="Enter your address"
               value={address}
               onChangeText={setAddress}
-              icon="🏠"
+              icon={Home}
               autoCapitalize="words"
             />
           </View>
 
           {/* Info Box */}
           <View style={styles.infoBox}>
-            <Text style={styles.infoIcon}>ℹ️</Text>
+            <Info size={20} color={colors.primary} strokeWidth={2} style={{ marginRight: spacing.sm }} />
             <Text style={styles.infoText}>
               Fields marked with * are required. Your information is secure and private.
             </Text>
@@ -197,7 +323,7 @@ const ProfileFormScreen: React.FC = () => {
           <View style={styles.actionsSection}>
             <CustomButton
               title={isSubmitting ? 'Saving...' : 'Save Changes'}
-              icon="💾"
+              icon={Save}
               variant="primary"
               onPress={handleSubmit}
               loading={isSubmitting}
@@ -206,7 +332,7 @@ const ProfileFormScreen: React.FC = () => {
 
             <CustomButton
               title="Reset Form"
-              icon="🔄"
+              icon={RotateCcw}
               variant="outline"
               onPress={handleReset}
               disabled={isSubmitting}
@@ -224,11 +350,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.backgroundLight,
   },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: spacing.md,
+    fontSize: typography.fontSize.base,
+    color: colors.textSecondary,
+  },
   keyboardView: {
     flex: 1,
   },
   scrollContent: {
     paddingBottom: spacing.xl,
+  },
+  backButton: {
+    padding: spacing.md,
+    marginLeft: spacing.sm,
+    marginTop: Platform.OS === 'ios' ? spacing.lg : spacing.md,
+    width: 48,
   },
   
   // Header

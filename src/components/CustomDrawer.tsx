@@ -15,6 +15,7 @@ import {
   Animated,
   Dimensions,
 } from 'react-native';
+import { Home, BarChart, User, BookOpen, Settings, LogOut } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
 import { getToken, getUserData, clearStorage } from '../services/storage.service';
 
@@ -91,7 +92,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({ visible, onClose, navigatio
 
   const navigateTo = (screen: string) => {
     onClose();
-    if (screen === 'Profile' || screen === 'Learn' || screen === 'Settings') {
+    if (screen === 'Learn' || screen === 'Settings') {
       Alert.alert('Coming Soon', `${screen} feature will be available soon!`);
     } else {
       navigation.navigate(screen);
@@ -99,11 +100,11 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({ visible, onClose, navigatio
   };
 
   const menuItems = [
-    { id: 1, icon: '🏠', label: 'Home', screen: 'Welcome' },
-    { id: 2, icon: '📊', label: 'Dashboard', screen: 'Dashboard' },
-    { id: 3, icon: '👤', label: 'Profile', screen: 'Profile' },
-    { id: 4, icon: '📖', label: 'Learn Vastu', screen: 'Learn' },
-    { id: 5, icon: '⚙️', label: 'Settings', screen: 'Settings' },
+    { id: 1, icon: Home, label: 'Home', screen: 'Welcome' },
+    { id: 2, icon: BarChart, label: 'Dashboard', screen: 'Dashboard' },
+    { id: 3, icon: User, label: 'Profile', screen: 'Profile' },
+    { id: 4, icon: BookOpen, label: 'Learn Vastu', screen: 'Learn' },
+    { id: 5, icon: Settings, label: 'Settings', screen: 'Settings' },
   ];
 
   return (
@@ -143,17 +144,22 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({ visible, onClose, navigatio
 
         {/* Menu Items */}
         <View style={styles.menuSection}>
-          {menuItems.map((item) => (
-            <TouchableOpacity
-              key={item.id}
-              style={styles.menuItem}
-              onPress={() => navigateTo(item.screen)}
-              activeOpacity={0.7}
-            >
-              <Text style={styles.menuIcon}>{item.icon}</Text>
-              <Text style={styles.menuLabel}>{item.label}</Text>
-            </TouchableOpacity>
-          ))}
+          {menuItems.map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <TouchableOpacity
+                key={item.id}
+                style={styles.menuItem}
+                onPress={() => navigateTo(item.screen)}
+                activeOpacity={0.7}
+              >
+                <View style={styles.menuIcon}>
+                  <IconComponent size={22} color={colors.textPrimary} strokeWidth={2} />
+                </View>
+                <Text style={styles.menuLabel}>{item.label}</Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         {/* Divider */}
@@ -165,7 +171,9 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({ visible, onClose, navigatio
           onPress={handleLogout}
           activeOpacity={0.7}
         >
-          <Text style={styles.logoutIcon}>🚪</Text>
+          <View style={styles.logoutIcon}>
+            <LogOut size={22} color={colors.error} strokeWidth={2} />
+          </View>
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
 
@@ -264,8 +272,9 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   menuIcon: {
-    fontSize: 24,
     marginRight: spacing.md,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   menuLabel: {
     fontSize: typography.fontSize.base,
@@ -285,8 +294,9 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
   },
   logoutIcon: {
-    fontSize: 24,
     marginRight: spacing.md,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   logoutText: {
     fontSize: typography.fontSize.base,

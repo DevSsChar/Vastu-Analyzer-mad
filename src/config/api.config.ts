@@ -4,8 +4,10 @@
  */
 
 // Change this to your actual backend URL when deployed
+// For Android Emulator: use 10.0.2.2
+// For Physical Device: use your computer's IP address (e.g., 192.168.1.105)
 export const API_BASE_URL = __DEV__ 
-  ? 'http://localhost:3000/api'
+  ? 'http://10.0.2.2:3000/api'
   : 'https://your-production-api.com/api';
 
 export const API_ENDPOINTS = {
