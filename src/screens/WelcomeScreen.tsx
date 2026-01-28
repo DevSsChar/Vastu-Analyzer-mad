@@ -128,7 +128,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
           <TouchableOpacity
             style={styles.primaryButton}
             activeOpacity={0.8}
-            onPress={() => navigation?.navigate('DirectionSetup')}
+            onPress={() => navigation?.navigate('AnalyzePlan')}
           >
             <BarChart size={20} color={colors.textLight} strokeWidth={2} style={{ marginRight: spacing.sm }} />
             <Text style={styles.primaryButtonText}>Analyze My Home</Text>
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   menuButton: {
     position: 'absolute',
     top: Platform.OS === 'ios' ? 50 : 20,
-    left: 20,
+    right: 20,
     width: 44,
     height: 44,
     borderRadius: 22,
@@ -219,7 +219,7 @@ const styles = StyleSheet.create({
   // Header Section Styles
   headerSection: {
     alignItems: 'center',
-    paddingTop: Platform.OS === 'ios' ? spacing['2xl'] + 20 : spacing['2xl'],
+    paddingTop: Platform.OS === 'ios' ? spacing['3xl'] + 40 : spacing['3xl'] + 40,
     paddingBottom: spacing.lg,
     paddingHorizontal: spacing.lg,
   },

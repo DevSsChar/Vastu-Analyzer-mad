@@ -14,7 +14,10 @@ import {
   StatusBar,
   Platform,
   Alert,
+  Image as RNImage,
+  ActivityIndicator,
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { ArrowLeft, HelpCircle, Lightbulb, X, Cloud, Camera, Image, Ruler, Play } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
 
@@ -34,28 +37,92 @@ const PRO_TIPS = [
 ];
 
 const AnalyzePlanScreen: React.FC<AnalyzePlanScreenProps> = ({ navigation }) => {
-  const [selectedFile, setSelectedFile] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [showTip, setShowTip] = useState(true);
   const [currentTip] = useState(() => PRO_TIPS[Math.floor(Math.random() * PRO_TIPS.length)]);
+  const [isUploading, setIsUploading] = useState(false);
 
-  const handleBrowseFiles = () => {
-    Alert.alert('Browse Files', 'File picker will be implemented here');
+  const requestPermissions = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission Required', 'Please grant camera roll permissions to upload images.');
+      return false;
+    }
+    return true;
   };
 
-  const handleCamera = () => {
-    Alert.alert('Camera', 'Camera functionality will be implemented here');
+  const requestCameraPermissions = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('Permission Required', 'Please grant camera permissions to take photos.');
+      return false;
+    }
+    return true;
   };
 
-  const handleGallery = () => {
-    Alert.alert('Gallery', 'Gallery picker will be implemented here');
+  const handleImageSelected = (imageUri: string) => {
+    setSelectedImage(imageUri);
+    // Navigate to DirectionSetup with the selected image
+    setTimeout(() => {
+      navigation?.navigate('DirectionSetup', { floorPlanImage: imageUri });
+    }, 300);
   };
 
-  const handleFiles = () => {
-    Alert.alert('Files', 'File manager will be implemented here');
+  const handleBrowseFiles = async () => {
+    const hasPermission = await requestPermissions();
+    if (!hasPermission) return;
+
+    try {
+      setIsUploading(true);
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: false,
+        quality: 1,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        handleImageSelected(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.error('Error picking image:', error);
+      Alert.alert('Error', 'Failed to pick image. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleCamera = async () => {
+    const hasPermission = await requestCameraPermissions();
+    if (!hasPermission) return;
+
+    try {
+      setIsUploading(true);
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: false,
+        quality: 1,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        handleImageSelected(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.error('Error taking photo:', error);
+      Alert.alert('Error', 'Failed to take photo. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleGallery = async () => {
+    await handleBrowseFiles();
   };
 
   const handleContinue = () => {
-    Alert.alert('Continue', 'Navigate to Direction Setup');
+    if (selectedImage) {
+      navigation?.navigate('DirectionSetup', { floorPlanImage: selectedImage });
+    } else {
+      Alert.alert('No Image', 'Please upload a floor plan image first.');
+    }
   };
 
   return (
@@ -109,13 +176,34 @@ const AnalyzePlanScreen: React.FC<AnalyzePlanScreenProps> = ({ navigation }) => 
 
         {/* Upload Section */}
         <View style={styles.uploadCard}>
-          <View style={styles.uploadIconContainer}>
-            <View style={styles.uploadIconCircle}>
-              <Cloud size={40} color={colors.primary} strokeWidth={2} />
+          {selectedImage ? (
+            <View style={styles.imagePreviewContainer}>
+              <RNImage
+                source={{ uri: selectedImage }}
+                style={styles.previewImage}
+                resizeMode="contain"
+              />
+              <TouchableOpacity
+                style={styles.changeImageButton}
+                onPress={handleBrowseFiles}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.changeImageText}>Change Image</Text>
+              </TouchableOpacity>
             </View>
-          </View>
-          
-          <Text style={styles.uploadTitle}>Upload Your Floor Plan</Text>
+          ) : (
+            <>
+              <View style={styles.uploadIconContainer}>
+                <View style={styles.uploadIconCircle}>
+                  {isUploading ? (
+                    <ActivityIndicator size="large" color={colors.primary} />
+                  ) : (
+                    <Cloud size={40} color={colors.primary} strokeWidth={2} />
+                  )}
+                </View>
+              </View>
+              
+              <Text style={styles.uploadTitle}>Upload Your Floor Plan</Text>
           <Text style={styles.uploadDescription}>
             Our AI will analyze its directional zones according to Vastu Shastra principles.
           </Text>
@@ -166,11 +254,13 @@ const AnalyzePlanScreen: React.FC<AnalyzePlanScreenProps> = ({ navigation }) => 
             </TouchableOpacity> */}
           </View>
 
-          {/* Supported Formats */}
-          <View style={styles.formatsContainer}>
-            <Lightbulb size={14} color={colors.primary} strokeWidth={2} style={{ marginRight: spacing.xs }} />
-            <Text style={styles.formatsText}>Supported formats: PNG, JPG, PDF</Text>
-          </View>
+              {/* Supported Formats */}
+              <View style={styles.formatsContainer}>
+                <Lightbulb size={14} color={colors.primary} strokeWidth={2} style={{ marginRight: spacing.xs }} />
+                <Text style={styles.formatsText}>Supported formats: PNG, JPG, PDF</Text>
+              </View>
+            </>
+          )}
         </View>
 
         {/* Best Results Section */}
@@ -178,14 +268,16 @@ const AnalyzePlanScreen: React.FC<AnalyzePlanScreenProps> = ({ navigation }) => 
           <Text style={styles.tipsTitle}>How to get the best results</Text>
           
           {/* Continue Button */}
-          <TouchableOpacity
-            style={styles.continueButton}
-            onPress={handleContinue}
-            activeOpacity={0.8}
-          >
-            <Play size={16} color={colors.textSecondary} strokeWidth={2} style={{ marginRight: spacing.sm }} />
-            <Text style={styles.continueText}>Continue to Direction Setup</Text>
-          </TouchableOpacity>
+          {selectedImage && (
+            <TouchableOpacity
+              style={styles.continueButtonPrimary}
+              onPress={handleContinue}
+              activeOpacity={0.8}
+            >
+              <Text style={styles.continueButtonPrimaryText}>Continue to Direction Setup</Text>
+              <Play size={16} color={colors.textLight} strokeWidth={2} style={{ marginLeft: spacing.sm }} />
+            </TouchableOpacity>
+          )}
 
           {/* Tips List */}
           <View style={styles.tipsList}>
@@ -345,6 +437,29 @@ const styles = StyleSheet.create({
     marginBottom: spacing.lg,
     paddingHorizontal: spacing.md,
   },
+  imagePreviewContainer: {
+    width: '100%',
+    alignItems: 'center',
+    marginBottom: spacing.md,
+  },
+  previewImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: borderRadius.md,
+    marginBottom: spacing.md,
+    backgroundColor: colors.gray100,
+  },
+  changeImageButton: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm,
+    borderRadius: borderRadius.md,
+  },
+  changeImageText: {
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.semibold,
+    color: colors.textLight,
+  },
   browseButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -424,6 +539,26 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     borderRadius: borderRadius.md,
     marginBottom: spacing.md,
+  },
+  continueButtonPrimary: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.primary,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.xl,
+    borderRadius: borderRadius.lg,
+    marginBottom: spacing.md,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  continueButtonPrimaryText: {
+    fontSize: typography.fontSize.base,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.textLight,
   },
   continueIcon: {
     fontSize: 16,

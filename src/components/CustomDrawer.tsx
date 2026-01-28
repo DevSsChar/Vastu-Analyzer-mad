@@ -30,6 +30,7 @@ interface CustomDrawerProps {
 const CustomDrawer: React.FC<CustomDrawerProps> = ({ visible, onClose, navigation }) => {
   const [userData, setUserData] = useState<any>(null);
   const slideAnim = useState(new Animated.Value(-SCREEN_WIDTH * 0.8))[0];
+  const backdropOpacity = useState(new Animated.Value(0))[0];
 
   useEffect(() => {
     loadUserData();
@@ -38,19 +39,34 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({ visible, onClose, navigatio
   useEffect(() => {
     if (visible) {
       console.log('Opening drawer');
-      Animated.timing(slideAnim, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
+      Animated.parallel([
+        Animated.spring(slideAnim, {
+          toValue: 0,
+          tension: 65,
+          friction: 11,
+          useNativeDriver: true,
+        }),
+        Animated.timing(backdropOpacity, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]).start();
     } else {
-      Animated.timing(slideAnim, {
-        toValue: -SCREEN_WIDTH * 0.8,
-        duration: 250,
-        useNativeDriver: true,
-      }).start();
+      Animated.parallel([
+        Animated.timing(slideAnim, {
+          toValue: -SCREEN_WIDTH * 0.8,
+          duration: 250,
+          useNativeDriver: true,
+        }),
+        Animated.timing(backdropOpacity, {
+          toValue: 0,
+          duration: 250,
+          useNativeDriver: true,
+        }),
+      ]).start();
     }
-  }, [visible, slideAnim]);
+  }, [visible, slideAnim, backdropOpacity]);
 
   const loadUserData = async () => {
     const user = await getUserData();
@@ -115,11 +131,15 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({ visible, onClose, navigatio
       onRequestClose={onClose}
     >
       <View style={styles.modalContainer}>
-        <TouchableOpacity
-          style={styles.overlay}
-          activeOpacity={1}
-          onPress={onClose}
-        />
+        <Animated.View
+          style={[styles.overlay, { opacity: backdropOpacity }]}
+        >
+          <TouchableOpacity
+            style={styles.overlayTouchable}
+            activeOpacity={1}
+            onPress={onClose}
+          />
+        </Animated.View>
         <Animated.View
           style={[
             styles.drawerContainer,
@@ -193,8 +213,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   overlay: {
-    flex: 1,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  overlayTouchable: {
+    flex: 1,
   },
   drawerContainer: {
     width: SCREEN_WIDTH * 0.8,

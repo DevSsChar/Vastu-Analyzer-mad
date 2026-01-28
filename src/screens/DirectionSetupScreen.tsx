@@ -4,7 +4,7 @@
  * Features: Compass dial, rotation control, AI detection, GPS alignment
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -14,20 +14,99 @@ import {
   StatusBar,
   Platform,
   Alert,
+  Image as RNImage,
+  Animated,
 } from 'react-native';
-import { ArrowLeft, Info, Compass, Maximize2, RotateCw, Clock, Bot, MapPin } from 'lucide-react-native';
+import { Magnetometer } from 'expo-sensors';
+import { ArrowLeft, Info, Compass, Maximize2, RotateCw, Clock, Bot, MapPin, Navigation } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
 
 interface DirectionSetupScreenProps {
   navigation?: any;
+  route?: {
+    params?: {
+      floorPlanImage?: string;
+    };
+  };
 }
 
-const DirectionSetupScreen: React.FC<DirectionSetupScreenProps> = ({ navigation }) => {
+const DirectionSetupScreen: React.FC<DirectionSetupScreenProps> = ({ navigation, route }) => {
   const [rotation, setRotation] = useState(45); // Degrees from North
   const [showInfo, setShowInfo] = useState(true);
+  const [magnetometerData, setMagnetometerData] = useState({ x: 0, y: 0, z: 0 });
+  const [heading, setHeading] = useState(0); // Current compass heading in degrees
+  const [direction, setDirection] = useState('N'); // Cardinal direction (N, NE, E, etc.)
+  const [subscription, setSubscription] = useState<any>(null);
+  const compassRotation = new Animated.Value(0);
+  const floorPlanImage = route?.params?.floorPlanImage;
+
+  // Convert degrees to cardinal/intercardinal direction
+  const getCardinalDirection = (degrees: number): string => {
+    const normalizedDegrees = (degrees + 360) % 360;
+    const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+    const index = Math.round(normalizedDegrees / 45) % 8;
+    return directions[index];
+  };
+
+  // Calculate heading from magnetometer data
+  const calculateHeading = (x: number, y: number): number => {
+    let angle = Math.atan2(y, x) * (180 / Math.PI);
+    // Normalize to 0-360
+    angle = (angle + 360) % 360;
+    return angle;
+  };
+
+  useEffect(() => {
+    // Subscribe to magnetometer updates
+    const _subscribe = () => {
+      Magnetometer.setUpdateInterval(100); // Update every 100ms
+      const sub = Magnetometer.addListener((data) => {
+        setMagnetometerData(data);
+        const newHeading = calculateHeading(data.x, data.y);
+        setHeading(newHeading);
+        setDirection(getCardinalDirection(newHeading));
+        
+        // Smooth rotation animation
+        Animated.spring(compassRotation, {
+          toValue: -newHeading,
+          useNativeDriver: true,
+          tension: 10,
+          friction: 5,
+        }).start();
+      });
+      setSubscription(sub);
+    };
+
+    // Check if magnetometer is available
+    Magnetometer.isAvailableAsync().then((result) => {
+      if (result) {
+        _subscribe();
+      } else {
+        Alert.alert('Compass Not Available', 'Your device does not support compass functionality.');
+      }
+    });
+
+    return () => {
+      if (subscription) {
+        subscription.remove();
+      }
+    };
+  }, []);
 
   const handleConfirm = () => {
-    Alert.alert('Direction Confirmed', `North direction set at ${rotation}° from current orientation`);
+    Alert.alert(
+      'Direction Confirmed', 
+      `House entrance is facing ${direction} (${Math.round(heading)}°)`,
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            // You can pass this data to the next screen or save it
+            console.log('Entrance Direction:', direction, 'Heading:', heading);
+          }
+        }
+      ]
+    );
   };
 
   const handleAIDetection = () => {
@@ -56,7 +135,8 @@ const DirectionSetupScreen: React.FC<DirectionSetupScreenProps> = ({ navigation 
         </TouchableOpacity>
         
         <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>Critical for accurate Vastu analysis</Text>
+          <Text style={styles.headerTitle}>Set Your House Entrance Direction</Text>
+          <Text style={styles.headerSubtitle}>Go inside and face the entrance</Text>
         </View>
       </View>
 
@@ -69,81 +149,58 @@ const DirectionSetupScreen: React.FC<DirectionSetupScreenProps> = ({ navigation 
           <View style={styles.infoCard}>
             <View style={styles.infoHeader}>
               <View style={styles.infoIconContainer}>
-                <Info size={18} color={colors.textLight} strokeWidth={2.5} />
+                <Navigation size={18} color={colors.textLight} strokeWidth={2.5} />
               </View>
               <View style={styles.infoContent}>
-                <Text style={styles.infoTitle}>Why is this important?</Text>
+                <Text style={styles.infoTitle}>📍 Instructions</Text>
                 <Text style={styles.infoText}>
-                  Accurate direction ensures correct Dosha identification and remedy suggestions.
+                  1. Go inside your house{'\n'}
+                  2. Stand facing the main entrance{'\n'}
+                  3. Hold your phone flat and steady{'\n'}
+                  4. The compass will show which direction the entrance faces
                 </Text>
               </View>
             </View>
           </View>
         )}
 
-        {/* Compass Container */}
-        <View style={styles.compassSection}>
-          <View style={styles.gridBackground}>
-            {/* Grid lines */}
-            {Array.from({ length: 20 }).map((_, i) => (
-              <View key={`v-${i}`} style={[styles.gridLineVertical, { left: `${i * 5}%` }]} />
-            ))}
-            {Array.from({ length: 20 }).map((_, i) => (
-              <View key={`h-${i}`} style={[styles.gridLineHorizontal, { top: `${i * 5}%` }]} />
-            ))}
+        {/* Live Compass Display */}
+        <View style={styles.liveCompassCard}>
+          <Text style={styles.liveCompassLabel}>You are currently facing:</Text>
+          <View style={styles.directionBadge}>
+            <Text style={styles.directionBadgeText}>{direction}</Text>
           </View>
-
-          {/* Compass Dial */}
-          <View style={styles.compassContainer}>
-            {/* Outer Ring */}
-            <View style={styles.compassOuter}>
-              {/* Direction Markers */}
-              <View style={[styles.directionMarker, styles.markerNorth]}>
-                <View style={styles.markerDot} />
+          <Text style={styles.liveHeadingText}>{Math.round(heading)}°</Text>
+          
+          {/* Mini Real-time Compass */}
+          <View style={styles.miniCompassContainer}>
+            <Animated.View 
+              style={[
+                styles.miniCompassNeedle,
+                { transform: [{ rotate: compassRotation.interpolate({
+                    inputRange: [0, 360],
+                    outputRange: ['0deg', '360deg']
+                  })}]
+                }
+              ]}
+            >
+              <View style={styles.needleArrow}>
+                <View style={styles.needleNorth} />
+                <View style={styles.needleSouth} />
               </View>
-              <View style={[styles.directionMarker, styles.markerEast]}>
-                <View style={styles.markerDot} />
-              </View>
-              <View style={[styles.directionMarker, styles.markerSouth]}>
-                <View style={styles.markerDot} />
-              </View>
-              <View style={[styles.directionMarker, styles.markerWest]}>
-                <View style={styles.markerDot} />
-              </View>
-              
-              {/* North Arrow Indicator */}
-              <View style={[styles.arrowIndicator, { transform: [{ rotate: `${rotation}deg` }] }]}>
-                <View style={styles.arrowLine} />
-                <View style={styles.arrowHead} />
-              </View>
-            </View>
-
-            {/* Middle Ring */}
-            <View style={styles.compassMiddle} />
-
-            {/* Inner Circle */}
-            <View style={styles.compassInner}>
-              <View style={styles.compassIconContainer}>
-                <Compass size={28} color='#7C3AED' strokeWidth={2} />
-              </View>
-            </View>
+            </Animated.View>
+            <Text style={styles.miniCompassN}>N</Text>
+            <Text style={styles.miniCompassE}>E</Text>
+            <Text style={styles.miniCompassS}>S</Text>
+            <Text style={styles.miniCompassW}>W</Text>
           </View>
-
-          {/* Fullscreen Button */}
-          <TouchableOpacity style={styles.fullscreenButton} activeOpacity={0.7}>
-            <Maximize2 size={18} color={colors.textSecondary} strokeWidth={2} />
-          </TouchableOpacity>
         </View>
 
         {/* Direction Display */}
         <View style={styles.directionDisplay}>
-          <Text style={styles.directionValue}>{displayRotation}° from North</Text>
-          <View style={styles.directionSubtext}>
-            <RotateCw size={16} color={colors.primary} strokeWidth={2} style={{ marginRight: spacing.xs }} />
-            <Text style={styles.rotationText}>
-              +{displayRotation}° {isClockwise ? 'clockwise' : 'counter-clockwise'}
-            </Text>
-          </View>
+          <Text style={styles.directionLabel}>House Entrance Facing:</Text>
+          <Text style={styles.directionValue}>{direction}</Text>
+          <Text style={styles.directionSubValue}>({Math.round(heading)}° from North)</Text>
         </View>
 
         {/* Confirm Button */}
@@ -152,36 +209,17 @@ const DirectionSetupScreen: React.FC<DirectionSetupScreenProps> = ({ navigation 
           onPress={handleConfirm}
           activeOpacity={0.8}
         >
-          <Text style={styles.confirmButtonText}>Confirm Direction</Text>
+          <Text style={styles.confirmButtonText}>Confirm Entrance Direction</Text>
           <View style={styles.confirmIconContainer}>
-            <Compass size={14} color={colors.textLight} strokeWidth={2.5} />
+            <Navigation size={14} color={colors.textLight} strokeWidth={2.5} />
           </View>
         </TouchableOpacity>
 
-        {/* Need Help Link */}
-        <TouchableOpacity style={styles.helpLink} activeOpacity={0.7}>
-          <Text style={styles.helpText}>Need help?</Text>
-        </TouchableOpacity>
-
-        {/* Detection Options */}
-        <View style={styles.detectionOptions}>
-          <TouchableOpacity
-            style={styles.detectionButton}
-            onPress={handleAIDetection}
-            activeOpacity={0.7}
-          >
-            <Bot size={32} color={colors.primary} strokeWidth={2} />
-            <Text style={styles.detectionText}>AI Detection</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.detectionButton}
-            onPress={handleGPSAlign}
-            activeOpacity={0.7}
-          >
-            <MapPin size={32} color={colors.primary} strokeWidth={2} />
-            <Text style={styles.detectionText}>GPS Align</Text>
-          </TouchableOpacity>
+        {/* Help Text */}
+        <View style={styles.helpContainer}>
+          <Text style={styles.helpText}>
+            Make sure you're standing inside the house, facing outward toward the entrance door
+          </Text>
         </View>
       </ScrollView>
     </View>
@@ -218,9 +256,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headerTitle: {
+    fontSize: typography.fontSize.base,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.textPrimary,
+  },
+  headerSubtitle: {
     fontSize: typography.fontSize.sm,
     fontWeight: typography.fontWeight.medium,
     color: colors.textSecondary,
+    marginTop: 2,
   },
   scrollContent: {
     padding: spacing.md,
@@ -267,6 +311,117 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   
+  // Live Compass Card Styles
+  liveCompassCard: {
+    backgroundColor: colors.surfaceLight,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    marginBottom: spacing.lg,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.primary,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  liveCompassLabel: {
+    fontSize: typography.fontSize.sm,
+    color: colors.textSecondary,
+    fontWeight: typography.fontWeight.medium,
+    marginBottom: spacing.sm,
+  },
+  directionBadge: {
+    backgroundColor: colors.primary,
+    paddingHorizontal: spacing.xl,
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.md,
+    marginBottom: spacing.xs,
+  },
+  directionBadgeText: {
+    fontSize: typography.fontSize['3xl'],
+    fontWeight: typography.fontWeight.bold,
+    color: colors.textLight,
+    letterSpacing: 2,
+  },
+  liveHeadingText: {
+    fontSize: typography.fontSize.lg,
+    color: colors.textSecondary,
+    fontWeight: typography.fontWeight.medium,
+    marginBottom: spacing.md,
+  },
+  miniCompassContainer: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: '#F3F0FF',
+    borderWidth: 3,
+    borderColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  miniCompassNeedle: {
+    width: 100,
+    height: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  needleArrow: {
+    width: 4,
+    height: 70,
+    alignItems: 'center',
+  },
+  needleNorth: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 8,
+    borderRightWidth: 8,
+    borderBottomWidth: 35,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: '#EF4444',
+  },
+  needleSouth: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 8,
+    borderRightWidth: 8,
+    borderTopWidth: 35,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderTopColor: '#94A3B8',
+  },
+  miniCompassN: {
+    position: 'absolute',
+    top: 8,
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.bold,
+    color: '#EF4444',
+  },
+  miniCompassE: {
+    position: 'absolute',
+    right: 8,
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.textSecondary,
+  },
+  miniCompassS: {
+    position: 'absolute',
+    bottom: 8,
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.textSecondary,
+  },
+  miniCompassW: {
+    position: 'absolute',
+    left: 8,
+    fontSize: typography.fontSize.sm,
+    fontWeight: typography.fontWeight.bold,
+    color: colors.textSecondary,
+  },
+  
   // Compass Section Styles
   compassSection: {
     position: 'relative',
@@ -281,6 +436,12 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#FAFAFA',
     borderRadius: borderRadius.lg,
+    overflow: 'hidden',
+  },
+  floorPlanImage: {
+    width: '100%',
+    height: '100%',
+    opacity: 0.6,
   },
   gridLineVertical: {
     position: 'absolute',
@@ -430,13 +591,28 @@ const styles = StyleSheet.create({
   // Direction Display Styles
   directionDisplay: {
     alignItems: 'center',
-    marginBottom: spacing.xl,
+    marginBottom: spacing.lg,
+    backgroundColor: '#F3F0FF',
+    padding: spacing.lg,
+    borderRadius: borderRadius.lg,
+    borderWidth: 1,
+    borderColor: '#E0D7FF',
+  },
+  directionLabel: {
+    fontSize: typography.fontSize.sm,
+    color: colors.textSecondary,
+    fontWeight: typography.fontWeight.medium,
+    marginBottom: spacing.xs,
   },
   directionValue: {
-    fontSize: typography.fontSize['2xl'],
+    fontSize: typography.fontSize['3xl'],
     fontWeight: typography.fontWeight.bold,
-    color: colors.textPrimary,
+    color: colors.primary,
     marginBottom: spacing.xs,
+  },
+  directionSubValue: {
+    fontSize: typography.fontSize.sm,
+    color: colors.textSecondary,
   },
   directionSubtext: {
     flexDirection: 'row',
@@ -486,15 +662,26 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   
-  // Help Link Styles
-  helpLink: {
-    alignItems: 'center',
-    marginBottom: spacing.xl,
+  // Help Container Styles
+  helpContainer: {
+    backgroundColor: '#FFF7ED',
+    padding: spacing.md,
+    borderRadius: borderRadius.md,
+    borderWidth: 1,
+    borderColor: '#FED7AA',
+    marginBottom: spacing.lg,
   },
   helpText: {
     fontSize: typography.fontSize.sm,
-    color: colors.textSecondary,
-    textDecorationLine: 'underline',
+    color: '#9A3412',
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  
+  // Help Link Styles (kept for compatibility)
+  helpLink: {
+    alignItems: 'center',
+    marginBottom: spacing.xl,
   },
   
   // Detection Options Styles
