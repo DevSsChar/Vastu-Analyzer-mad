@@ -15,7 +15,7 @@ import {
   Animated,
   Dimensions,
 } from 'react-native';
-import { Home, BarChart, User, BookOpen, Settings, LogOut } from 'lucide-react-native';
+import { Home, BarChart, User, BookOpen, Settings, LogOut, Clock } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
 import { getToken, getUserData, clearStorage } from '../services/storage.service';
 
@@ -118,9 +118,10 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({ visible, onClose, navigatio
   const menuItems = [
     { id: 1, icon: Home, label: 'Home', screen: 'Welcome' },
     { id: 2, icon: BarChart, label: 'Dashboard', screen: 'Dashboard' },
-    { id: 3, icon: User, label: 'Profile', screen: 'Profile' },
-    { id: 4, icon: BookOpen, label: 'Learn Vastu', screen: 'Learn' },
-    { id: 5, icon: Settings, label: 'Settings', screen: 'Settings' },
+    { id: 3, icon: Clock, label: 'History', screen: 'History' },
+    { id: 4, icon: User, label: 'Profile', screen: 'Profile' },
+    { id: 5, icon: BookOpen, label: 'Learn Vastu', screen: 'Learn' },
+    { id: 6, icon: Settings, label: 'Settings', screen: 'Settings' },
   ];
 
   return (

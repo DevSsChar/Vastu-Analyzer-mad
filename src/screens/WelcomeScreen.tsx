@@ -12,12 +12,13 @@ import {
   TouchableOpacity,
   StyleSheet,
   Dimensions,
-  StatusBar,
   Platform,
+  StatusBar,
 } from 'react-native';
 import { Compass, Zap, Home, Sparkles, BarChart, Menu } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
 import CustomDrawer from '../components/CustomDrawer';
+import { getToken } from '../services/storage.service';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -49,6 +50,23 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ IconComponent, title, descrip
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
   const [drawerVisible, setDrawerVisible] = React.useState(false);
   
+  const handleAnalyzePress = async () => {
+    try {
+      const token = await getToken();
+      if (token) {
+        // User is authenticated, go to Dashboard
+        navigation?.navigate('Dashboard');
+      } else {
+        // User is not authenticated, go to Login
+        navigation?.navigate('Login');
+      }
+    } catch (error) {
+      console.error('Error checking auth:', error);
+      // On error, navigate to Login
+      navigation?.navigate('Login');
+    }
+  };
+  
   const features = [
     {
       IconComponent: Compass,
@@ -74,8 +92,6 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundLight} />
-      
       {/* Background Pattern Overlay */}
       <View style={styles.patternOverlay} pointerEvents="none" />
       
@@ -128,7 +144,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ navigation }) => {
           <TouchableOpacity
             style={styles.primaryButton}
             activeOpacity={0.8}
-            onPress={() => navigation?.navigate('AnalyzePlan')}
+            onPress={handleAnalyzePress}
           >
             <BarChart size={20} color={colors.textLight} strokeWidth={2} style={{ marginRight: spacing.sm }} />
             <Text style={styles.primaryButtonText}>Analyze My Home</Text>
@@ -181,7 +197,7 @@ const styles = StyleSheet.create({
   },
   menuButton: {
     position: 'absolute',
-    top: Platform.OS === 'ios' ? 50 : 20,
+    top: 20,
     right: 20,
     width: 44,
     height: 44,

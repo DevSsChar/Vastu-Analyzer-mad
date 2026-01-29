@@ -13,14 +13,14 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
-  StatusBar,
   Platform,
   Image,
   KeyboardAvoidingView,
   Alert,
   Linking,
+  StatusBar,
 } from 'react-native';
-import { ArrowLeft, Eye, EyeOff, Building2 } from 'lucide-react-native';
+import { Eye, EyeOff, Building2 } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
 import { setToken, setUserData } from '../services/storage.service';
 
@@ -64,9 +64,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         await setToken(data.token);
         await setUserData(data.user);
         
-        // Navigate to Welcome screen with drawer
+        // Navigate to Dashboard screen
         if (navigation) {
-          navigation.replace('Welcome');
+          navigation.replace('Dashboard');
         }
       } else {
         Alert.alert('Login Failed', data.error || 'Invalid credentials');
@@ -104,8 +104,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundLight} />
-      
       {/* Background Pattern */}
       <View style={styles.patternBackground} />
       
@@ -118,11 +116,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          {/* Back Button */}
-          <TouchableOpacity style={styles.backButton} onPress={() => console.log('Go back')}>
-            <ArrowLeft size={24} color={colors.textPrimary} strokeWidth={2} />
-          </TouchableOpacity>
-
           {/* Branding Section */}
           <View style={styles.brandingSection}>
             <View style={styles.logoContainer}>
@@ -268,39 +261,27 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: spacing.xl,
+    paddingBottom: spacing.lg,
     maxWidth: 430,
     width: '100%',
     alignSelf: 'center',
-  },
-
-  // Back Button
-  backButton: {
-    padding: spacing.md,
-    marginLeft: -spacing.sm,
-    marginTop: Platform.OS === 'ios' ? spacing.lg : spacing.md,
-    width: 48,
-  },
-  backIcon: {
-    fontSize: 24,
-    color: colors.textPrimary,
   },
 
   // Branding Section
   brandingSection: {
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
-    paddingBottom: spacing.xl,
+    paddingTop: spacing['4xl'],
+    paddingBottom: spacing.lg,
   },
   logoContainer: {
-    width: 64,
-    height: 64,
+    width: 56,
+    height: 56,
     backgroundColor: colors.primary,
     borderRadius: borderRadius.lg,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
@@ -308,14 +289,14 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   appTitle: {
-    fontSize: typography.fontSize['3xl'],
+    fontSize: typography.fontSize['2xl'],
     fontWeight: typography.fontWeight.bold,
     color: colors.textPrimary,
-    marginBottom: spacing.sm,
+    marginBottom: spacing.xs,
     letterSpacing: typography.letterSpacing.tight,
   },
   appSubtitle: {
-    fontSize: typography.fontSize.base,
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     textAlign: 'center',
   },
@@ -323,11 +304,11 @@ const styles = StyleSheet.create({
   // Social Login
   socialLoginSection: {
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
   },
   googleButton: {
     width: '100%',
-    height: 56,
+    height: 50,
     backgroundColor: colors.surfaceLight,
     borderRadius: borderRadius.md,
     borderWidth: 1,
@@ -366,7 +347,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.lg,
+    paddingVertical: spacing.md,
     gap: spacing.md,
   },
   dividerLine: {
@@ -398,7 +379,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
   inputContainer: {
-    height: 56,
+    height: 50,
     backgroundColor: colors.whiteOpacity(0.5),
     borderRadius: borderRadius.md,
     borderWidth: 1,
@@ -439,12 +420,12 @@ const styles = StyleSheet.create({
   // Login Button
   loginButton: {
     width: '100%',
-    height: 56,
+    height: 50,
     backgroundColor: colors.primary,
     borderRadius: borderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: spacing.md,
+    marginTop: spacing.sm,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.25,
@@ -464,7 +445,7 @@ const styles = StyleSheet.create({
   // Footer
   footerSection: {
     alignItems: 'center',
-    paddingTop: spacing.xl,
+    paddingTop: spacing.lg,
     paddingHorizontal: spacing.lg,
   },
   footerText: {

@@ -13,13 +13,13 @@ import {
   ScrollView,
   StyleSheet,
   Dimensions,
-  StatusBar,
   Platform,
   KeyboardAvoidingView,
   Alert,
   Linking,
+  StatusBar,
 } from 'react-native';
-import { ArrowLeft, Eye, EyeOff } from 'lucide-react-native';
+import { Eye, EyeOff } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
 import { setToken, setUserData } from '../services/storage.service';
 
@@ -92,9 +92,9 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
           {
             text: 'OK',
             onPress: () => {
-              // Navigate to Welcome screen with drawer
+              // Navigate to Dashboard screen
               if (navigation) {
-                navigation.replace('Welcome');
+                navigation.replace('Dashboard');
               }
             },
           },
@@ -130,8 +130,6 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundLight} />
-      
       {/* Background Pattern */}
       <View style={styles.patternBackground} />
       
@@ -144,11 +142,6 @@ const SignUpScreen: React.FC<SignUpScreenProps> = ({ navigation }) => {
           showsVerticalScrollIndicator={false}
           keyboardShouldPersistTaps="handled"
         >
-          {/* Back Button */}
-          <TouchableOpacity style={styles.backButton} onPress={() => console.log('Go back')}>
-            <ArrowLeft size={24} color={colors.textPrimary} strokeWidth={2} />
-          </TouchableOpacity>
-
           {/* Branding Section */}
           <View style={styles.brandingSection}>
             <View style={styles.logoContainer}>
@@ -359,39 +352,27 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: spacing.xl,
+    paddingBottom: spacing.md,
     maxWidth: 430,
     width: '100%',
     alignSelf: 'center',
-  },
-
-  // Back Button
-  backButton: {
-    padding: spacing.md,
-    marginLeft: -spacing.sm,
-    marginTop: Platform.OS === 'ios' ? spacing.lg : spacing.md,
-    width: 48,
-  },
-  backIcon: {
-    fontSize: 24,
-    color: colors.textPrimary,
   },
 
   // Branding Section
   brandingSection: {
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.lg,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.md,
   },
   logoContainer: {
-    width: 64,
-    height: 64,
+    width: 52,
+    height: 52,
     backgroundColor: colors.primary,
     borderRadius: borderRadius.lg,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: spacing.md,
+    marginBottom: spacing.sm,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
@@ -399,17 +380,17 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   logoIcon: {
-    fontSize: 32,
+    fontSize: 28,
   },
   appTitle: {
-    fontSize: typography.fontSize['2xl'],
+    fontSize: typography.fontSize.xl,
     fontWeight: typography.fontWeight.bold,
     color: colors.textPrimary,
     marginBottom: spacing.xs,
     letterSpacing: typography.letterSpacing.tight,
   },
   appSubtitle: {
-    fontSize: typography.fontSize.base,
+    fontSize: typography.fontSize.sm,
     color: colors.textSecondary,
     textAlign: 'center',
   },
@@ -417,11 +398,11 @@ const styles = StyleSheet.create({
   // Social Login
   socialLoginSection: {
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
+    paddingVertical: 0,
   },
   googleButton: {
     width: '100%',
-    height: 56,
+    height: 48,
     backgroundColor: colors.surfaceLight,
     borderRadius: borderRadius.md,
     borderWidth: 1,
@@ -460,7 +441,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingVertical: spacing.sm,
     gap: spacing.md,
   },
   dividerLine: {
@@ -479,20 +460,20 @@ const styles = StyleSheet.create({
   // Form Section
   formSection: {
     paddingHorizontal: spacing.lg,
-    gap: spacing.md,
+    gap: spacing.sm,
   },
   inputGroup: {
     gap: spacing.xs,
   },
   inputLabel: {
-    fontSize: typography.fontSize.sm,
+    fontSize: typography.fontSize.xs,
     fontWeight: typography.fontWeight.semibold,
     color: colors.textPrimary,
     paddingHorizontal: spacing.xs,
-    marginBottom: spacing.xs,
+    marginBottom: 2,
   },
   inputContainer: {
-    height: 56,
+    height: 48,
     backgroundColor: colors.whiteOpacity(0.5),
     borderRadius: borderRadius.md,
     borderWidth: 1,
@@ -523,12 +504,12 @@ const styles = StyleSheet.create({
   // Sign Up Button
   signUpButton: {
     width: '100%',
-    height: 56,
+    height: 48,
     backgroundColor: colors.primary,
     borderRadius: borderRadius.md,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: spacing.sm,
+    marginTop: spacing.xs,
     shadowColor: colors.primary,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.25,
@@ -539,7 +520,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   signUpButtonText: {
-    fontSize: typography.fontSize.lg,
+    fontSize: typography.fontSize.base,
     fontWeight: typography.fontWeight.bold,
     color: colors.textLight,
     letterSpacing: typography.letterSpacing.wide,
@@ -547,11 +528,11 @@ const styles = StyleSheet.create({
 
   // Terms
   termsText: {
-    fontSize: typography.fontSize.xs,
+    fontSize: 10,
     color: colors.textSecondary,
     textAlign: 'center',
-    marginTop: spacing.sm,
-    lineHeight: 18,
+    marginTop: spacing.xs,
+    lineHeight: 14,
   },
   termsLink: {
     color: colors.primary,
@@ -561,7 +542,7 @@ const styles = StyleSheet.create({
   // Footer
   footerSection: {
     alignItems: 'center',
-    paddingTop: spacing.lg,
+    paddingTop: spacing.md,
     paddingHorizontal: spacing.lg,
   },
   footerText: {

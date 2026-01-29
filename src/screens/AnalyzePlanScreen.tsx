@@ -11,15 +11,16 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  StatusBar,
   Platform,
   Alert,
   Image as RNImage,
   ActivityIndicator,
+  StatusBar,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { ArrowLeft, HelpCircle, Lightbulb, X, Cloud, Camera, Image, Ruler, Play } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
+import BottomNav from '../components/BottomNav';
 
 interface AnalyzePlanScreenProps {
   navigation?: any;
@@ -127,8 +128,6 @@ const AnalyzePlanScreen: React.FC<AnalyzePlanScreenProps> = ({ navigation }) => 
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundLight} />
-      
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
@@ -139,7 +138,7 @@ const AnalyzePlanScreen: React.FC<AnalyzePlanScreenProps> = ({ navigation }) => 
           <ArrowLeft size={24} color={colors.textPrimary} strokeWidth={2} />
         </TouchableOpacity>
         
-        <Text style={styles.headerTitle}>Analyze Plan</Text>
+        <View style={styles.headerSpacer} />
         
         <TouchableOpacity
           style={styles.helpButton}
@@ -299,6 +298,9 @@ const AnalyzePlanScreen: React.FC<AnalyzePlanScreenProps> = ({ navigation }) => 
           </View>
         </View>
       </ScrollView>
+
+      {/* Bottom Navigation */}
+      <BottomNav navigation={navigation} activeScreen="AnalyzePlan" />
     </View>
   );
 };
@@ -341,6 +343,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.textPrimary,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  headerSpacer: {
+    flex: 1,
   },
   helpIcon: {
     fontSize: 20,

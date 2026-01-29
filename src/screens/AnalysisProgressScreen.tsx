@@ -11,12 +11,13 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  StatusBar,
   Platform,
   Animated,
+  StatusBar,
 } from 'react-native';
 import { ArrowLeft, Bot, Check, Lightbulb } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
+import BottomNav from '../components/BottomNav';
 
 interface AnalysisProgressScreenProps {
   navigation?: any;
@@ -133,8 +134,6 @@ const AnalysisProgressScreen: React.FC<AnalysisProgressScreenProps> = ({ navigat
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundLight} />
-      
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
@@ -145,7 +144,7 @@ const AnalysisProgressScreen: React.FC<AnalysisProgressScreenProps> = ({ navigat
           <ArrowLeft size={24} color={colors.textPrimary} strokeWidth={2} />
         </TouchableOpacity>
         
-        <Text style={styles.headerTitle}>Analysis Progress</Text>
+        <View style={styles.headerSpacer} />
         <View style={styles.headerSpacer} />
       </View>
 
@@ -256,6 +255,9 @@ const AnalysisProgressScreen: React.FC<AnalysisProgressScreenProps> = ({ navigat
           </View>
         </TouchableOpacity>
       </ScrollView>
+
+      {/* Bottom Navigation */}
+      <BottomNav navigation={navigation} activeScreen="AnalysisProgress" />
     </View>
   );
 };

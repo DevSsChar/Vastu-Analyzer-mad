@@ -11,15 +11,16 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
-  StatusBar,
   Platform,
   Alert,
   Image as RNImage,
   Animated,
+  StatusBar,
 } from 'react-native';
 import { Magnetometer } from 'expo-sensors';
 import { ArrowLeft, Info, Compass, Maximize2, RotateCw, Clock, Bot, MapPin, Navigation } from 'lucide-react-native';
 import { colors, typography, spacing, borderRadius } from '../theme';
+import BottomNav from '../components/BottomNav';
 
 interface DirectionSetupScreenProps {
   navigation?: any;
@@ -101,8 +102,9 @@ const DirectionSetupScreen: React.FC<DirectionSetupScreenProps> = ({ navigation,
         {
           text: 'OK',
           onPress: () => {
-            // You can pass this data to the next screen or save it
+            // Navigate to Processing screen
             console.log('Entrance Direction:', direction, 'Heading:', heading);
+            navigation?.navigate('Processing');
           }
         }
       ]
@@ -122,8 +124,6 @@ const DirectionSetupScreen: React.FC<DirectionSetupScreenProps> = ({ navigation,
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor={colors.backgroundLight} />
-      
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity
@@ -134,10 +134,7 @@ const DirectionSetupScreen: React.FC<DirectionSetupScreenProps> = ({ navigation,
           <ArrowLeft size={24} color={colors.textPrimary} strokeWidth={2} />
         </TouchableOpacity>
         
-        <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>Set Your House Entrance Direction</Text>
-          <Text style={styles.headerSubtitle}>Go inside and face the entrance</Text>
-        </View>
+        <View style={styles.headerContent} />
       </View>
 
       <ScrollView
@@ -222,6 +219,9 @@ const DirectionSetupScreen: React.FC<DirectionSetupScreenProps> = ({ navigation,
           </Text>
         </View>
       </ScrollView>
+
+      {/* Bottom Navigation */}
+      <BottomNav navigation={navigation} activeScreen="DirectionSetup" />
     </View>
   );
 };
