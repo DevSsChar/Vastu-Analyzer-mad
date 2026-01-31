@@ -6,7 +6,6 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 import uvicorn
 from transformers import AutoModelForCausalLM, AutoTokenizer
-import time
 
 load_dotenv()
 
@@ -46,23 +45,21 @@ if tokenizer.pad_token is None:
 print("✅ Tokenizer loaded")
 
 # -------------------------------------------------
-# LOAD MODEL (CPU ONLY - OPTIMIZED)
+# LOAD MODEL (CPU ONLY - STABLE)
 # -------------------------------------------------
-print("🧠 Loading model on CPU...")
+print("🧠 Loading model on CPU (stable, no GPU errors)...")
 
 model = AutoModelForCausalLM.from_pretrained(
     BASE_MODEL,
     device_map="cpu",
-    torch_dtype=torch.float32,  # ✅ Use FP32 on CPU (faster than FP16 on CPU!)
+    torch_dtype=torch.float16,  # Use FP16 for efficiency
     low_cpu_mem_usage=True,
 )
 
 model.eval()
 
-# ✅ Enable CPU optimizations
-torch.set_num_threads(8)  # Use 8 CPU threads
-
 print("✅ Model loaded successfully on CPU")
+print("💾 Using ~11GB RAM")
 
 # -------------------------------------------------
 # FASTAPI
@@ -78,21 +75,19 @@ app.add_middleware(
 
 class VastuQuery(BaseModel):
     question: str
-    max_tokens: int = 100  # ✅ Reduced default
+    max_tokens: int = 200
+    temperature: float = 0.2
 
 class VastuResponse(BaseModel):
     question: str
     answer: str
     model: str
-    generation_time: float
 
 # -------------------------------------------------
-# GENERATION (OPTIMIZED)
+# GENERATION
 # -------------------------------------------------
 @torch.inference_mode()
 def generate_response(question, max_tokens):
-    start_time = time.time()
-    
     prompt = f"""### System:
 {SYSTEM_PROMPT}
 
@@ -102,33 +97,18 @@ def generate_response(question, max_tokens):
 ### Response:
 """
 
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512)  # ✅ Shorter context
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=2048)
 
-    # ✅ AGGRESSIVE generation settings for speed
     output = model.generate(
         **inputs,
         max_new_tokens=max_tokens,
-        min_new_tokens=10,  # ✅ Force minimum output
-        do_sample=False,  # Greedy = fastest
-        num_beams=1,  # ✅ No beam search
-        repetition_penalty=1.2,  # ✅ Higher penalty to stop loops
+        do_sample=False,
+        repetition_penalty=1.1,
         pad_token_id=tokenizer.eos_token_id,
-        eos_token_id=tokenizer.eos_token_id,
-        early_stopping=True,  # ✅ Stop ASAP
-        use_cache=True,  # ✅ Use KV cache
     )
 
     text = tokenizer.decode(output[0], skip_special_tokens=True)
-    answer = text.split("### Response:")[-1].strip()
-    
-    # ✅ Truncate if too long
-    if len(answer) > 500:
-        answer = answer[:500] + "..."
-    
-    generation_time = time.time() - start_time
-    print(f"⏱️ Generated in {generation_time:.2f}s")
-    
-    return answer, generation_time
+    return text.split("### Response:")[-1].strip()
 
 # -------------------------------------------------
 # API ENDPOINT
@@ -138,7 +118,7 @@ def ask_vastu(query: VastuQuery):
     if not query.question.strip():
         raise HTTPException(status_code=400, detail="Question cannot be empty")
 
-    answer, gen_time = generate_response(
+    answer = generate_response(
         query.question,
         query.max_tokens,
     )
@@ -147,15 +127,7 @@ def ask_vastu(query: VastuQuery):
         question=query.question,
         answer=answer,
         model="VastuGPT (Llama-3-8B CPU)",
-        generation_time=gen_time,
     )
-
-# -------------------------------------------------
-# HEALTH CHECK
-# -------------------------------------------------
-@app.get("/health")
-def health():
-    return {"status": "healthy", "model": "VastuGPT", "device": "cpu"}
 
 # -------------------------------------------------
 # RUN
@@ -166,6 +138,5 @@ if __name__ == "__main__":
     print("="*60)
     print(f"📍 Local: http://localhost:{PORT}")
     print(f"📖 Docs: http://localhost:{PORT}/docs")
-    print(f"🧵 Using {torch.get_num_threads()} CPU threads")
     print("="*60 + "\n")
     uvicorn.run(app, host=HOST, port=PORT)
