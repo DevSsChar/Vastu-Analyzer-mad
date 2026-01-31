@@ -1,0 +1,17 @@
+# Core ML Libraries
+transformers>=4.36.0
+peft
+accelerate
+bitsandbytes>=0.41.0
+
+# API Framework
+fastapi
+uvicorn[standard]
+python-dotenv
+
+# Data Validation
+pydantic>=2.0.0
+
+# Optional: For better performance
+sentencepiece
+protobuf
