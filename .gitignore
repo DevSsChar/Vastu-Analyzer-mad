@@ -77,7 +77,12 @@ yarn-error.log
 
 /src/generated/prisma
 
-//venv
-fastapi+model/vastu
-//venv
-fastapi+model/offload_hybrid
+# Python Environments
+fastapi+model/vastu/
+fastapi+model/offload_hybrid/
+fastapi+model/main_model/model/
+fastapi+model/__pycache__/
+fastapi+model/vastu-merged-llama3/
+**/__pycache__/
+*.pyc
+

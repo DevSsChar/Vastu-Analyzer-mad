@@ -1,0 +1,23 @@
+# FastAPI and server
+fastapi==0.115.0
+uvicorn[standard]==0.32.1
+python-multipart==0.0.20
+
+# Pydantic
+pydantic==2.10.5
+pydantic-settings==2.7.1
+
+# ML/AI dependencies
+torch==2.5.1
+torchvision==0.20.1
+transformers==4.46.0
+accelerate==1.0.0
+peft==0.13.2
+
+# Image processing
+Pillow==11.0.0
+opencv-python==4.10.0.84
+numpy==1.26.4
+
+# Utilities
+python-dotenv==1.0.1

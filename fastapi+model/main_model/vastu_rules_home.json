@@ -1,0 +1,502 @@
+{
+  "vastu_rules_for_home": {
+    "overview": {
+      "purpose": "Vastu Shastra provides guidelines for harmony, peace, health, prosperity through proper house design",
+      "importance": "Good Vastu brings positive energy, removes negative aspects, improves health and financial prosperity"
+    },
+
+    "main_entrance_door": {
+      "importance": "Most critical element - affects 85% of home's Vastu",
+      "general_rules": [
+        "Should open inward, not outward",
+        "Must be larger than other doors in house",
+        "Should not make creaking sound",
+        "Keep main entrance well-lit and clean",
+        "Avoid placing dustbin near main door",
+        "No obstructions like trees, poles, or walls directly in front"
+      ],
+      "auspicious_locations_by_facing": {
+        "north_facing": ["Soma", "Bhallat", "Mukhya"],
+        "east_facing": ["Jayant", "Mahendra"],
+        "south_facing": ["Vitatha", "Grihakhat"],
+        "west_facing": ["Pushadant", "Sugreev", "Varun"]
+      },
+      "avoid": ["Southwest corner entrance"],
+      "decorations": [
+        "Place auspicious symbols like Om, Swastika, or Kalash",
+        "Use nameplate on left side of door",
+        "Can place torans or door hangings"
+      ]
+    },
+
+    "living_room": {
+      "location_by_house_facing": {
+        "north_facing": ["North", "Northeast", "Northwest"],
+        "east_facing": ["East", "Northeast"],
+        "south_facing": ["Southeast", "South"],
+        "west_facing": ["West", "Northwest"]
+      },
+      "avoid": "Never in Southwest",
+      "furniture_arrangement": {
+        "heavy_furniture": "Place against south or west walls",
+        "seating_direction": "Guests should face north or east",
+        "TV_placement": "Southeast, east, or north wall",
+        "shape": "Square or rectangular furniture preferred"
+      },
+      "colors": {
+        "recommended": ["White", "Light blue", "Light green", "Beige", "Cream"],
+        "avoid": ["Deep red", "Black", "Dark gray", "Dark colors"]
+      },
+      "tips": [
+        "Keep room well-lit with natural light",
+        "Avoid clutter",
+        "Use light curtains"
+      ]
+    },
+
+    "bedroom": {
+      "master_bedroom": {
+        "ideal_location": "Southwest (but not for heart patients)",
+        "alternative_locations": ["South", "West", "Northwest"],
+        "avoid": ["Northeast", "Southeast"]
+      },
+      "children_bedroom": {
+        "ideal_location": "West or Northwest",
+        "best_for_studies": "Northeast"
+      },
+      "guest_bedroom": {
+        "ideal_location": "Northwest"
+      },
+      "bed_placement": {
+        "rules": [
+          "Head should not face north (in Northern Hemisphere)",
+          "Best sleeping direction: South or East",
+          "Bed should not be directly opposite to door",
+          "Keep head close to wall",
+          "Windows at head side are good",
+          "Leave space on both sides of bed"
+        ]
+      },
+      "mirror_rules": [
+        "Avoid mirrors in bedroom if possible",
+        "If needed, place on north or east wall",
+        "Bed should not reflect in mirror",
+        "Cover mirrors at night"
+      ],
+      "colors": {
+        "recommended": ["Light blue", "Light green", "Light pink", "Lavender", "Soft pastel shades"],
+        "avoid": ["Red", "Black", "Dark colors", "Very bright colors"]
+      },
+      "things_to_avoid": [
+        "No water features in bedroom",
+        "No fountain or aquarium",
+        "Avoid broken or damaged items",
+        "No thorny plants",
+        "Keep under-bed space clutter-free"
+      ]
+    },
+
+    "kitchen": {
+      "ideal_locations": ["Southeast (best)", "Northwest (alternative)"],
+      "avoid_locations": ["Northeast", "Southwest", "North", "Directly under or above toilet"],
+      "cooking_platform": {
+        "location": "Southeast corner of kitchen",
+        "cook_facing": "East while cooking (best)",
+        "avoid_facing": "North while cooking"
+      },
+      "stove_placement": {
+        "direction": "Southeast corner",
+        "distance_from_wall": "Few inches gap from wall",
+        "avoid": "Directly opposite to kitchen door"
+      },
+      "sink_placement": {
+        "ideal_location": "Northeast corner of kitchen",
+        "alternative": "North side",
+        "important": "Sink and stove should not be on same platform or adjacent"
+      },
+      "refrigerator": {
+        "placement": "Southwest, South, West, or Northwest",
+        "avoid": "Northeast"
+      },
+      "storage_and_shelves": {
+        "location": "South or west walls",
+        "avoid": "East or north walls for heavy storage"
+      },
+      "windows_and_ventilation": {
+        "ideal": "East side windows",
+        "ensure": "Proper cross-ventilation"
+      },
+      "colors": {
+        "recommended": ["White", "Yellow", "Orange", "Light green", "Light pink"],
+        "avoid": ["Black", "Dark blue", "Dark gray", "Red"]
+      },
+      "dining_table_in_kitchen": {
+        "placement": "West or Northwest",
+        "eating_direction": "Face East or West while eating"
+      },
+      "tips": [
+        "Keep kitchen clean and clutter-free",
+        "Fix leaking taps immediately",
+        "Store food grains in southwest",
+        "Keep fire (stove) and water (sink) elements separate"
+      ]
+    },
+
+    "pooja_prayer_room": {
+      "ideal_location": "Northeast (best for positive energy)",
+      "alternative_locations": ["East", "North", "Center of house"],
+      "avoid": ["Under staircase", "Attached to toilet", "In bedroom", "Southeast", "Southwest"],
+      "idol_placement": {
+        "direction": "Face idols towards East or West (you face them from West or East)",
+        "avoid": "Idols facing South or North",
+        "height": "At chest level or eye level",
+        "avoid": "On floor or too high"
+      },
+      "altar_setup": {
+        "material": "Wood or marble",
+        "placement": "Against east or north wall"
+      },
+      "colors": {
+        "northeast_pooja_room": ["White", "Light yellow", "Light blue"],
+        "other_locations": ["White", "Light yellow", "Cream"]
+      },
+      "tips": [
+        "Keep room clean and sacred",
+        "Ensure proper lighting",
+        "Use natural materials",
+        "Avoid keeping broken idols",
+        "Can place small water feature"
+      ]
+    },
+
+    "bathroom_toilet": {
+      "ideal_locations": ["West", "Northwest", "South (but not Southwest)"],
+      "avoid_locations": ["Northeast", "East", "Center of house", "Southwest corner"],
+      "toilet_seat_direction": {
+        "ideal": "North-South axis",
+        "user_facing": "North or South while using",
+        "avoid": "East-West axis"
+      },
+      "bathroom_fixtures": {
+        "wash_basin": "Northeast, North, or East",
+        "bathtub_shower": "North, East, or Northeast",
+        "geyser": "Southeast corner"
+      },
+      "door": {
+        "rule": "Keep toilet door closed always",
+        "material": "Wooden door preferred"
+      },
+      "colors": {
+        "recommended": ["White", "Light blue", "Light pink", "Pastel shades"],
+        "avoid": ["Red", "Black", "Dark colors"]
+      },
+      "important_rules": [
+        "Toilet and kitchen should not share common wall",
+        "Toilet should not be above or below pooja room or kitchen",
+        "Keep bathroom clean and dry",
+        "Fix water leakage immediately",
+        "Ensure proper ventilation"
+      ],
+      "septic_tank": {
+        "location": "Northwest or Southeast of plot",
+        "avoid": "Northeast, Southwest"
+      }
+    },
+
+    "study_room": {
+      "ideal_location": "West, Northwest, or Northeast",
+      "avoid": "Under beam or staircase",
+      "study_table_placement": {
+        "position": "Child should face East or North while studying",
+        "table_location": "Against south or west wall",
+        "avoid": "Facing wall directly"
+      },
+      "bookshelves": {
+        "location": "North, East, or Northeast",
+        "avoid": "Above study table"
+      },
+      "colors": {
+        "recommended": ["Light green", "Light blue", "Cream", "White", "Light yellow"],
+        "avoid": ["Red", "Black", "Dark colors"]
+      },
+      "tips": [
+        "Keep room well-lit",
+        "Minimize distractions",
+        "Keep study area clutter-free",
+        "Can place Goddess Saraswati idol facing East or North"
+      ]
+    },
+
+    "dining_room": {
+      "ideal_locations": ["West", "Southeast", "East"],
+      "alternative": ["North", "Northeast"],
+      "avoid": ["Center of house (Brahmasthan)", "Southwest corner"],
+      "dining_table": {
+        "shape": "Square or rectangular preferred (avoid irregular shapes)",
+        "placement": "Leave space around table, not touching walls",
+        "avoid": "Under beam or directly under toilet/bedroom above"
+      },
+      "eating_direction": {
+        "ideal": "Face East or West while eating",
+        "avoid": "Facing South"
+      },
+      "colors": {
+        "recommended": ["Light green", "Light blue", "Orange", "Yellow", "Peach"],
+        "location_based": {
+          "east_dining": ["Light green", "Light blue"],
+          "west_dining": ["Off-white", "Cream", "Light yellow"]
+        },
+        "avoid": ["Red", "Black", "Dark colors"]
+      },
+      "tips": [
+        "Keep dining area clean",
+        "Good lighting essential",
+        "Can place bowl of fresh fruits",
+        "Avoid mirror directly reflecting dining table"
+      ]
+    },
+
+    "staircase": {
+      "ideal_location": "Southwest, South, West, or Northwest",
+      "avoid": ["Northeast", "Center of house"],
+      "direction_of_ascent": {
+        "preferred": "Clockwise (moving from North to East to South to West)",
+        "avoid": "Anti-clockwise"
+      },
+      "number_of_steps": {
+        "rule": "Odd numbers preferred",
+        "avoid": "Steps ending in zero (10, 20, 30)"
+      },
+      "construction": {
+        "rules": [
+          "First step in North or East",
+          "Should not touch east or north wall",
+          "No staircase in center (Brahmasthan)",
+          "External staircase better than internal"
+        ]
+      },
+      "under_staircase": {
+        "can_use_for": ["Storage of non-living items", "Shoe rack"],
+        "avoid": ["Pooja room", "Bedroom", "Kitchen", "Study area"]
+      },
+      "tips": [
+        "Keep staircase well-lit",
+        "Avoid broken or damaged steps",
+        "Ensure proper ventilation"
+      ]
+    },
+
+    "balcony_terrace": {
+      "ideal_location": ["North", "East", "Northeast"],
+      "avoid": "Southwest",
+      "height": {
+        "rule": "North and East sides should be lower than South and West"
+      },
+      "uses": {
+        "good": ["Plants", "Sitting area", "Morning exercise"],
+        "avoid": ["Storage of junk", "Heavy items on Northeast side"]
+      },
+      "tips": [
+        "Keep balcony clean",
+        "Good for indoor plants",
+        "Ensure proper drainage"
+      ]
+    },
+
+    "store_room": {
+      "ideal_location": "Southwest or South",
+      "avoid": "Northeast",
+      "storage_guidelines": {
+        "heavy_items": "Southwest corner",
+        "light_items": "Northeast or North",
+        "old_items": "Can be stored in Southwest"
+      },
+      "tips": [
+        "Keep organized",
+        "Avoid clutter",
+        "Regular cleaning important"
+      ]
+    },
+
+    "overhead_water_tank": {
+      "ideal_location": "Southwest corner (best)",
+      "alternative": ["West", "South"],
+      "avoid": ["Northeast", "North", "East"],
+      "height": "Southwest corner should have highest point",
+      "underground_water_tank": {
+        "ideal_location": "Northeast (best for underground storage)",
+        "alternative": ["North", "East"],
+        "avoid": "Southwest"
+      }
+    },
+
+    "colors_for_home": {
+      "by_direction": {
+        "north_walls": {
+          "recommended": ["White", "Light green", "Light blue", "Cream"],
+          "avoid": ["Red", "Yellow", "Dark colors"]
+        },
+        "south_walls": {
+          "recommended": ["Red", "Orange", "Pink", "Coral"],
+          "avoid": ["Blue", "Black"]
+        },
+        "east_walls": {
+          "recommended": ["White", "Light blue", "Light green"],
+          "avoid": ["Dark colors"]
+        },
+        "west_walls": {
+          "recommended": ["White", "Yellow", "Cream"],
+          "avoid": ["Blue"]
+        }
+      },
+      "general_principle": "Light colors create positive energy, dark colors should be avoided"
+    },
+
+    "brahmasthan": {
+      "definition": "Center of the house - most sacred space",
+      "rules": [
+        "Must be kept empty and open",
+        "No pillars in center",
+        "No walls dividing center",
+        "No heavy furniture",
+        "No toilets in center",
+        "No staircase in center"
+      ],
+      "benefits": "Keeping Brahmasthan empty ensures free flow of positive energy throughout house"
+    },
+
+    "plot_land_selection": {
+      "shape": {
+        "ideal": ["Square", "Rectangle (East-West or North-South longer)"],
+        "avoid": ["Triangular", "Circular", "Irregular", "L-shaped", "T-shaped"]
+      },
+      "slope": {
+        "ideal": "Slope towards North or East",
+        "good": "High in South and West, Low in North and East",
+        "avoid": "Slope towards South or West"
+      },
+      "soil": {
+        "good": "Soil that supports vegetation",
+        "test": "Dig 1-2 feet and refill - soil should be at same level",
+        "avoid": "Land with rocks, very sandy soil, graveyard land"
+      },
+      "surroundings": {
+        "check_for": [
+          "No T-junction or dead-end roads",
+          "Road on North or East is good",
+          "Avoid plots facing sharp corners of buildings",
+          "No large trees blocking sunlight from East"
+        ]
+      }
+    },
+
+    "general_tips": {
+      "cleanliness": [
+        "Keep entire house clean and clutter-free",
+        "Remove broken items immediately",
+        "Fix leaking taps and pipes",
+        "Ensure all doors and windows work properly"
+      ],
+      "lighting": [
+        "Ensure good natural light, especially from East",
+        "Northeast should be brightest part of house",
+        "Use warm lighting in evening"
+      ],
+      "ventilation": [
+        "Ensure cross-ventilation in all rooms",
+        "Windows on North and East are beneficial"
+      ],
+      "plants": {
+        "good_plants": ["Tulsi (Holy Basil)", "Money plant", "Bamboo", "Jasmine"],
+        "avoid_plants": ["Cactus", "Thorny plants", "Bonsai", "Dead plants"],
+        "placement": "East or North windows"
+      },
+      "mirrors": {
+        "good_placement": ["North wall", "East wall", "Near entrance (side wall)"],
+        "avoid": ["Opposite to main door", "In bedroom reflecting bed", "Broken mirrors"]
+      },
+      "clocks": {
+        "placement": "North or East wall",
+        "avoid": ["South wall", "West wall", "Stopped clocks"]
+      },
+      "water_features": {
+        "aquarium_fountain": "Northeast, North, or East",
+        "avoid": "Bedroom, South, Southwest"
+      }
+    },
+
+    "things_to_avoid": [
+      "Broken or damaged items anywhere in house",
+      "Clutter and unnecessary items",
+      "Leaking taps or pipes (causes financial loss)",
+      "Cracks in walls (repair immediately)",
+      "Stopped or broken clocks",
+      "Dry or dead plants",
+      "Exposed beams directly above bed or sitting area",
+      "Sharp corners pointing at doors or sitting areas",
+      "Shoes inside bedroom",
+      "Dirty or clogged drains"
+    ],
+
+    "immediate_benefits_of_good_vastu": [
+      "Improved mental peace and harmony",
+      "Better sleep quality",
+      "Enhanced health and vitality",
+      "Improved family relationships",
+      "Financial stability and growth",
+      "Success in career and business",
+      "Positive energy and atmosphere"
+    ],
+
+    "signs_of_vastu_defects": [
+      "Frequent illness in family",
+      "Financial problems despite hard work",
+      "Marital discord and fights",
+      "Children's poor academic performance",
+      "Constant restlessness and anxiety",
+      "Business losses",
+      "Delay in marriage or childbirth"
+    ],
+
+    "simple_vastu_remedies": {
+      "salt_water": "Keep bowl of salt water in problematic area, change weekly",
+      "pyramids": "Place metal pyramids in affected zones",
+      "crystal": "Use crystal balls in Northeast",
+      "wind_chimes": "Hang in North or West for positive energy",
+      "lighting": "Keep Northeast well-lit, use lamp in dark corners",
+      "plants": "Place money plant in Southeast for prosperity",
+      "mirrors": "Use strategically to deflect negative energy",
+      "colors": "Paint walls with appropriate Vastu colors"
+    },
+
+    "vastu_priorities": {
+      "most_important": [
+        "Main entrance location and direction",
+        "Kitchen placement and stove direction",
+        "Toilet location",
+        "Master bedroom location",
+        "Brahmasthan (center) kept empty"
+      ],
+      "moderately_important": [
+        "Other bedroom locations",
+        "Living room arrangement",
+        "Staircase direction",
+        "Colors of walls"
+      ],
+      "least_important_but_beneficial": [
+        "Decorative items placement",
+        "Plant positions",
+        "Furniture arrangement details"
+      ]
+    },
+
+    "vastu_consultation_needed": [
+      "Before buying plot or house",
+      "Before starting construction",
+      "During house planning and design phase",
+      "When experiencing persistent problems",
+      "For major renovations or additions",
+      "When combining Vastu with astrology (Astro-Vastu)"
+    ]
+  }
+}
