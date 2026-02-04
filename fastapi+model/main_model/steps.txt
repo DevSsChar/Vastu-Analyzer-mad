@@ -1,0 +1,14 @@
+1) !nohup python run_api.py > fastapi1.log 2>&1 &
+2) !curl http://127.0.0.1:8000/health
+3) !ngrok config add-authtoken 39CDFuc1kaXSOFdV3dosAc795eS_w5wkpoqCJGyeDqYAAZWK
+4)
+from pyngrok import ngrok
+
+# 🔑 PUT YOUR NGROK AUTHTOKEN HERE
+ngrok.set_auth_token("39CDFuc1kaXSOFdV3dosAc795eS_w5wkpoqCJGyeDqYAAZWK")
+public_url = ngrok.connect(8000, bind_tls=True)
+
+print("🚀 Public URL:", public_url.public_url)
+print("📋 Docs:", public_url.public_url + "/docs")
+
+print("🔍 Health:", public_url.public_url + "/health")

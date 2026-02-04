@@ -596,19 +596,7 @@ async def analyze_floor_plan(
     house_facing: str = Form(..., description="Direction house faces: N, NE, E, SE, S, SW, W, NW"),
     door_position: str = Form(..., description="Door position on image: N, NE, E, SE, S, SW, W, NW")
 ):
-    """
-    Analyze floor plan for Vastu compliance
     
-    **Parameters:**
-    - **image**: Floor plan image (JPG, PNG)
-    - **house_facing**: Direction the house faces (stand at door, look OUT)
-    - **door_position**: Where the main door appears on the IMAGE
-    
-    **Returns:**
-    - Vastu score (0-100)
-    - Room-wise analysis
-    - Remedies for non-compliant rooms
-    """
     
     if not model or not tokenizer:
         raise HTTPException(status_code=503, detail="Model not loaded")
