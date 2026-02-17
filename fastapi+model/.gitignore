@@ -1,0 +1,38 @@
+# Python Virtual Environment
+vastu/
+offload_hybrid/
+
+# ML Models and Weights
+vastu-merged-llama3/
+vastu_lora_adapter_975/
+splitted_model/
+splitted_model.4bit/
+*.safetensors
+*.bin
+*.pth
+*.pt
+
+# Environment and Secrets
+.env
+.env.local
+*.key
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Temporary and Diagnostic Files
+_inspect.py
+diagnostic.py
+app.py
+fastapi1.py
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log

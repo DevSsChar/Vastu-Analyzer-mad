@@ -81,9 +81,21 @@ device_map["lm_head"] = "cpu"
 
 # ✅ Load with EXPLICIT quantization_config to override the saved one
 # NUCLEAR OPTION - Full CPU load
+# model = AutoModelForCausalLM.from_pretrained(
+#     MODEL_PATH,
+#     device_map="cpu",
+#     torch_dtype=torch.float16,
+#     low_cpu_mem_usage=True,
+# )
+bnb_config = BitsAndBytesConfig(
+    load_in_8bit=True,
+    llm_int8_enable_fp32_cpu_offload=True,
+)
+
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_PATH,
-    device_map="cpu",
+    device_map="auto",
+    quantization_config=bnb_config,
     torch_dtype=torch.float16,
     low_cpu_mem_usage=True,
 )

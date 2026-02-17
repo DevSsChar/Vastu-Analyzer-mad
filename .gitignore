@@ -77,12 +77,40 @@ yarn-error.log
 
 /src/generated/prisma
 
-# Python Environments
+# Python Environments and Cache
 fastapi+model/vastu/
 fastapi+model/offload_hybrid/
 fastapi+model/main_model/model/
-fastapi+model/__pycache__/
 fastapi+model/vastu-merged-llama3/
+fastapi+model/vastu_lora_adapter_975/
 **/__pycache__/
 *.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
+# ML Models and Large Files
+*.safetensors
+*.bin
+*.ckpt
+*.pth
+*.pt
+*.onnx
+*.h5
+*.pb
+splitted_model/
+splitted_model.4bit/
+
+# Diagnostic and Temporary Files
+fastapi+model/_inspect.py
+fastapi+model/diagnostic.py
+fastapi+model/app.py
+fastapi+model/fastapi1.py
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
