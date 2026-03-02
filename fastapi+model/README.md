@@ -261,6 +261,154 @@ python -c "import transformers; print(transformers.__version__)"
 
 ---
 
+## Exposing API to Web with ngrok
+
+### Setup ngrok Tunnel
+
+To make your local FastAPI server accessible from the internet:
+
+#### 1. Install ngrok
+
+**Option A: Using Chocolatey**
+```powershell
+choco install ngrok
+```
+
+**Option B: Manual Download**
+1. Download from https://ngrok.com/download
+2. Extract to a directory (e.g., `C:\ngrok`)
+3. Add to PATH or use full path
+
+#### 2. Configure Authentication
+
+```powershell
+# Authenticate with your ngrok token (one-time setup)
+ngrok config add-authtoken 39pwW8RdGMCYaFuOzDrr9WUebC7_5cNombvTvaPmvvJxRh1yR
+```
+
+#### 3. Start the FastAPI Server
+
+Open Terminal 1:
+```powershell
+cd D:\mad\MadApp\fastapi+model
+.\vastu\Scripts\Activate.ps1
+python fastapi_server.py
+```
+
+Wait for the server to show:
+```
+Server ready | http://localhost:8000/docs
+```
+
+#### 4. Start ngrok Tunnel
+
+Open Terminal 2:
+```powershell
+# Basic tunnel (HTTP only)
+ngrok http 8000
+
+# OR with custom subdomain (requires paid plan)
+ngrok http 8000 --subdomain=vastugpt
+
+# OR with region selection
+ngrok http 8000 --region=us
+```
+
+**Expected Output:**
+```
+ngrok                                                          
+
+Session Status                online
+Account                       Your Account
+Version                       3.x.x
+Region                        United States (us)
+Latency                       -
+Web Interface                 http://127.0.0.1:4040
+Forwarding                    https://abcd-1234-5678-90ab.ngrok-free.app -> http://localhost:8000
+
+Connections                   ttl     opn     rt1     rt5     p50     p90
+                              0       0       0.00    0.00    0.00    0.00
+```
+
+#### 5. Access Your API
+
+Your API is now publicly available at the ngrok URL:
+
+```bash
+# Example ngrok URL (yours will be different)
+https://abcd-1234-5678-90ab.ngrok-free.app
+
+# Test the API
+curl -X POST "https://abcd-1234-5678-90ab.ngrok-free.app/api/vastu/ask" \
+  -H "Content-Type: application/json" \
+  -d "{\"question\": \"Where should main door face?\"}"
+
+# API Documentation
+https://abcd-1234-5678-90ab.ngrok-free.app/docs
+```
+
+#### 6. Monitor Traffic
+
+ngrok provides a web interface for monitoring:
+- Open: `http://127.0.0.1:4040`
+- View all requests, responses, and replay requests
+- Inspect headers, body, and timing
+
+### ngrok Options
+
+| Option | Description |
+|--------|-------------|
+| `--region=us` | Choose region (us, eu, ap, au, sa, jp, in) |
+| `--subdomain=NAME` | Custom subdomain (paid plan) |
+| `--domain=DOMAIN` | Custom domain (paid plan) |
+| `--oauth=google` | Add OAuth authentication |
+| `--basic-auth="user:pass"` | Add basic authentication |
+
+### Security Considerations
+
+1. **Authentication** (Recommended)
+   ```powershell
+   # Add basic auth to ngrok tunnel
+   ngrok http 8000 --basic-auth="admin:secretpassword"
+   ```
+
+2. **Rate Limiting**
+   - ngrok free tier has rate limits
+   - Consider implementing API keys in FastAPI
+
+3. **HTTPS Only**
+   - ngrok provides HTTPS by default
+   - Always use HTTPS URLs in production
+
+4. **Monitor Usage**
+   - Check ngrok dashboard at http://127.0.0.1:4040
+   - Watch for unusual traffic patterns
+
+### Production Deployment Alternative
+
+For production use, consider:
+
+1. **Cloud Hosting**
+   - AWS EC2, Azure VM, Google Compute Engine
+   - Persistent public IP and domain
+
+2. **Containerization**
+   ```dockerfile
+   # Dockerfile
+   FROM python:3.12-slim
+   WORKDIR /app
+   COPY requirements.txt .
+   RUN pip install -r requirements.txt
+   COPY . .
+   CMD ["python", "fastapi_server.py"]
+   ```
+
+3. **Reverse Proxy**
+   - Nginx or Caddy for SSL termination
+   - Better performance and security
+
+---
+
 ## Model Architecture
 
 | Attribute | Value |

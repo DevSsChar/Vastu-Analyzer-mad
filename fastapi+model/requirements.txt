@@ -16,6 +16,3 @@ pydantic>=2.0.0
 # Optional: For better performance
 sentencepiece
 protobuf
-
-# Optional CPU-optimized runtime (recommended for low-latency CPU inference)
-llama-cpp-python>=0.2.90
